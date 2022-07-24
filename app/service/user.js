@@ -4,49 +4,16 @@ const Service = require('egg').Service;
 class UserService extends Service {
   // 登录
   async login(params) {
-    const res = await this.app.mysql.get('user', params);
+    const result = await this.app.mysql.get('user', params);
 
-    if (!res) {
-      return {
-        code: '-1',
-        msg: 'error',
-        result: {},
-      };
-    }
-
-    // 登录成功生成token
-    const token = this.app.jwt.sign(params, this.app.config.jwt.secret, { expiresIn: '1h' });
-
-    return {
-      code: '1',
-      msg: 'success',
-      result: res,
-      token,
-    };
+    return result;
   }
   // 获取所有的用户信息
-  async getAllUserList() {
-    const res = await this.app.mysql.select('user');
+  async getAllUserList(options) {
+    const result = await this.app.mysql.select('user', options);
+    const total = await this.app.mysql.query('select count(*) as total from user');
 
-    if (!res) {
-      return {
-        code: '-1',
-        msg: 'error',
-        result: {},
-      };
-    }
-
-    return {
-      code: '1',
-      msg: 'success',
-      result: res.map(item => {
-        return {
-          ...item,
-          statusName: item.status === 1 ? '启用' : item.status === 2 ? '禁用' : '',
-          sexName: item.sex === 1 ? '男' : item.sex === 2 ? '女' : '',
-        };
-      }),
-    };
+    return { result, total: total[0].total };
   }
   async insertUser(params) {
     // 新增用户
