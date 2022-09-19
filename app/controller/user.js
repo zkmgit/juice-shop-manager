@@ -76,22 +76,77 @@ class UserController extends Controller {
     const { ctx } = this;
     const params = ctx.request.body;
 
-    const user = await ctx.service.user.insertUser(params);
-    ctx.body = user;
+    const result = await ctx.service.user.insertUser(params);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {
+          value: 0,
+        },
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: {
+        value: result.res.affectedRows,
+      },
+    };
   }
   async updateUser() {
     const { ctx } = this;
     const params = ctx.request.body;
 
-    const user = await ctx.service.user.updateUser(params);
-    ctx.body = user;
+    const result = await ctx.service.user.updateUser(params);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {
+          value: 0,
+        },
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: {
+        value: result.res.affectedRows,
+      },
+    };
+
   }
   async deleteUser() {
     const { ctx } = this;
-    const params = ctx.request.body;
+    const params = ctx.params;
 
-    const user = await ctx.service.user.deleteUser(params);
-    ctx.body = user;
+    const result = await ctx.service.user.deleteUser(params);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {
+          value: 0,
+        },
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: {
+        value: result.res.affectedRows,
+      },
+    };
   }
 }
 
