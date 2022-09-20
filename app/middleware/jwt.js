@@ -11,10 +11,19 @@ module.exports = () => {
 
           if (decoded) await next();
         } catch (e) {
-          ctx.body = {
-            code: '401',
-            msg: 'token expired',
-          };
+          // token 过期
+          if (Reflect.has(e, 'message') && e.message === 'jwt expired') {
+            ctx.body = {
+              code: '401',
+              msg: 'token expired',
+            };
+          } else {
+            // 其他类型的错误
+            ctx.body = {
+              code: '0004',
+              msg: e.sqlMessage || 'error',
+            };
+          }
         }
 
       } else {
