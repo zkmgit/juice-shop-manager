@@ -51,6 +51,7 @@ module.exports = {
       status: 'integer 1启用 0禁用',
     } },
   },
+  // 分类
   CategoryJsonBody: {
     code: { type: 'string', required: true, example: '1' },
     msg: { type: 'string', required: true, example: 'success' },
@@ -86,6 +87,44 @@ module.exports = {
       category_name: 'string 分类名称',
       status: 'integer 1启用 0禁用',
       remark: 'string 备注',
+    } },
+  },
+  // 属性
+  AttributeJsonBody: {
+    code: { type: 'string', required: true, example: '1' },
+    msg: { type: 'string', required: true, example: 'success' },
+    result: { type: 'string', required: true, example: [
+      {
+        id: 1,
+        attribute_name: '颜色',
+        attribute_value: '红色,蓝色,绿色,黄色',
+        status: 1,
+        is_delete: 1,
+        create_time: '2022-11-02T04:28:15.000Z',
+        update_time: '2022-11-02T04:29:06.000Z',
+      },
+    ] },
+  },
+  AttributeQueryParams: {
+    param: { type: 'string', required: true, example: {
+      pn: 'integer',
+      ps: 'integer',
+    } },
+  },
+  EditAttributeParams: {
+    param: { type: 'string', required: true, example: {
+      id: 1,
+      attribute_name: '属性名称',
+      attribute_value: '属性值',
+      status: 'integer 1启用 0禁用',
+      is_delete: 'integer 1未删除 0 删除',
+    } },
+  },
+  AddAttributeParams: {
+    param: { type: 'string', required: true, example: {
+      attribute_name: '属性名称',
+      attribute_value: '属性值',
+      status: 'integer 1启用 0禁用',
     } },
   },
 };
