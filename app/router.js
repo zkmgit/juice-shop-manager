@@ -10,4 +10,6 @@ module.exports = app => {
   router.post('/api/upload', controller.utils.uploadFiles);
   // 用户模块
   require('./router/user')(app);
+  // 分类配置
+  require('./router/category')(app);
 };
