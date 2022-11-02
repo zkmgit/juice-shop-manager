@@ -16,7 +16,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1658221927848_1264';
 
   // add your middleware config here
-  config.middleware = [ 'globalJwt' ];
+  config.middleware = [ 'globalJwt', 'errorHandler' ];
 
   // add your user config here
   const userConfig = {
