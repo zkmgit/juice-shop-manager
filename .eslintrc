@@ -1,7 +1,9 @@
 {
   "extends": "eslint-config-egg",
   "root": true,
-  "tagNamePreference": {
-    "return": "returns"
+  "rules": {
+      "tagNamePreference": {
+        "return": "returns"
+      }
   }
 }
