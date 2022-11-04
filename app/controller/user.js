@@ -7,6 +7,15 @@ const Controller = require('egg').Controller;
 class UserController extends Controller {
   async login() {
     const { ctx } = this;
+    // 字段校验
+    const validate = this.app.validator.validate({ username: 'string', password: 'string' }, ctx.request.body);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      ctx.body = msg;
+      return;
+    }
+
     const params = ctx.request.body;
     const res = await ctx.service.user.login(params);
 

@@ -20,4 +20,9 @@ module.exports = {
     package: 'egg-swagger-doc', // 指定包名称。
   },
 
+  validate: {
+    enable: true,
+    package: 'egg-validate',
+  },
+
 };

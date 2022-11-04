@@ -87,6 +87,11 @@ module.exports = appInfo => {
     enable: true, // 默认 true (启用)。
   };
 
+  config.validate = {
+    convert: true,
+    widelyUndefined: true,
+  };
+
   return {
     ...config,
     ...userConfig,
