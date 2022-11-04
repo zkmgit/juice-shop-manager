@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 31/10/2022 17:14:20
+ Date: 04/11/2022 14:43:43
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,12 @@ CREATE TABLE `attribute`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of attribute
+-- ----------------------------
+INSERT INTO `attribute` VALUES (2, '111', '红色,蓝色,绿色', 1, 1, '2022-11-02 17:17:58', '2022-11-02 17:28:26');
 
 -- ----------------------------
 -- Table structure for carousel_image
@@ -46,7 +51,7 @@ CREATE TABLE `carousel_image`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for category
@@ -61,7 +66,21 @@ CREATE TABLE `category`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of category
+-- ----------------------------
+INSERT INTO `category` VALUES (3, '上装', 1, NULL, 1, '2022-11-01 16:42:34', '2022-11-01 16:42:34');
+INSERT INTO `category` VALUES (4, '裤装', 1, NULL, 1, '2022-11-01 16:42:52', '2022-11-01 16:42:52');
+INSERT INTO `category` VALUES (5, '特价区', 1, NULL, 1, '2022-11-01 16:42:59', '2022-11-01 16:42:59');
+INSERT INTO `category` VALUES (6, '裙装', 1, NULL, 1, '2022-11-01 16:43:07', '2022-11-01 16:43:07');
+INSERT INTO `category` VALUES (7, '套装', 1, NULL, 1, '2022-11-01 16:43:16', '2022-11-01 16:43:16');
+INSERT INTO `category` VALUES (8, '外套', 1, NULL, 1, '2022-11-01 16:43:21', '2022-11-01 16:43:21');
+INSERT INTO `category` VALUES (9, '秒杀', 1, NULL, 1, '2022-11-01 16:43:27', '2022-11-01 16:43:27');
+INSERT INTO `category` VALUES (10, '内裤', 1, NULL, 1, '2022-11-01 16:43:32', '2022-11-01 16:43:32');
+INSERT INTO `category` VALUES (11, '袜子', 1, NULL, 1, '2022-11-01 16:43:38', '2022-11-01 16:43:38');
+INSERT INTO `category` VALUES (12, '鞋', 1, NULL, 1, '2022-11-01 16:43:42', '2022-11-01 16:43:42');
 
 -- ----------------------------
 -- Table structure for product
@@ -83,7 +102,7 @@ CREATE TABLE `product`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for user
@@ -101,7 +120,7 @@ CREATE TABLE `user`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
