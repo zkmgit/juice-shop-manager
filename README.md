@@ -14,7 +14,3 @@ http://localhost:7001//swagger-ui.html#/
 swagger文档配置 ./config/config.default.js   搜索config.swaggerdoc
 token加密配置 ./config/config.default.js   搜索config.jwt
 ```
-
-```
-测试git122
-```
