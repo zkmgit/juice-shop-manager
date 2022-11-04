@@ -9,6 +9,7 @@ module.exports = () => {
           code: '0004',
           msg: e.message,
         };
+        return;
       }
 
       ctx.body = {
