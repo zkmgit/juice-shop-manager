@@ -15,6 +15,14 @@ class CategoryController extends Controller {
   async getAllCategoryList() {
     const { ctx } = this;
     const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ pn: 'string', ps: 'string' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      ctx.body = msg;
+      return;
+    }
     // 组装查询条件
     const where = Object.keys(params).filter(key => ![ 'ps', 'pn' ].includes(key)).reduce((pre, next) => {
       return { ...pre, [next]: params[next] };
@@ -26,13 +34,8 @@ class CategoryController extends Controller {
       offset: (params.pn - 1) * params.ps, // 数据偏移量
     };
 
-    // { // 搜索 post 表
-    //   where: { status: 'draft', author: ['author1', 'author2'] }, // WHERE 条件
-    //   limit: 10, // 返回数据量
-    //   offset: 0, // 数据偏移量
-    // }
     const { result, total } = await ctx.service.category.getAllCategoryList(options);
-    // ctx.body = user;
+
     if (!result) {
       ctx.body = {
         code: '-1',
@@ -66,7 +69,14 @@ class CategoryController extends Controller {
   async insertCategory() {
     const { ctx } = this;
     const params = ctx.request.body;
-    console.log('params => ', params);
+    // 字段校验
+    const validate = this.app.validator.validate({ category_name: 'string', status: 'number', remark: 'string?' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      ctx.body = msg;
+      return;
+    }
 
     const result = await ctx.service.category.insertCategory(params);
 
@@ -99,6 +109,14 @@ class CategoryController extends Controller {
   async updateCategory() {
     const { ctx } = this;
     const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ id: 'number', category_name: 'string', status: 'number', remark: 'string?' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      ctx.body = msg;
+      return;
+    }
 
     const result = await ctx.service.category.updateCategory(params);
 

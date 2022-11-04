@@ -117,7 +117,6 @@ module.exports = {
       attribute_name: '属性名称',
       attribute_value: '属性值',
       status: 'integer 1启用 0禁用',
-      is_delete: 'integer 1未删除 0 删除',
     } },
   },
   AddAttributeParams: {

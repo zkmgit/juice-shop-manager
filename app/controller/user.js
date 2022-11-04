@@ -7,8 +7,9 @@ const Controller = require('egg').Controller;
 class UserController extends Controller {
   async login() {
     const { ctx } = this;
+    const params = ctx.request.body;
     // 字段校验
-    const validate = this.app.validator.validate({ username: 'string', password: 'string' }, ctx.request.body);
+    const validate = this.app.validator.validate({ username: 'string', password: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
@@ -16,7 +17,6 @@ class UserController extends Controller {
       return;
     }
 
-    const params = ctx.request.body;
     const res = await ctx.service.user.login(params);
 
     if (!res) {
@@ -37,7 +37,6 @@ class UserController extends Controller {
       result: res,
       token,
     };
-    // ctx.body = user;
   }
   /**
     * @summary 用户列表分页查询
@@ -49,6 +48,17 @@ class UserController extends Controller {
   async getAllUserList() {
     const { ctx } = this;
     const params = ctx.request.body;
+
+    // 字段校验
+    const validate = this.app.validator.validate({ pn: 'string', ps: 'string' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      ctx.body = msg;
+      return;
+    }
+
+
     // 组装查询条件
     const where = Object.keys(params).filter(key => ![ 'ps', 'pn' ].includes(key)).reduce((pre, next) => {
       return { ...pre, [next]: params[next] };
@@ -60,13 +70,8 @@ class UserController extends Controller {
       offset: (params.pn - 1) * params.ps, // 数据偏移量
     };
 
-    // { // 搜索 post 表
-    //   where: { status: 'draft', author: ['author1', 'author2'] }, // WHERE 条件
-    //   limit: 10, // 返回数据量
-    //   offset: 0, // 数据偏移量
-    // }
     const { result, total } = await ctx.service.user.getAllUserList(options);
-    // ctx.body = user;
+
     if (!result) {
       ctx.body = {
         code: '-1',
@@ -100,6 +105,14 @@ class UserController extends Controller {
   async insertUser() {
     const { ctx } = this;
     const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ name: 'string', username: 'string', password: 'string', email: 'string?' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      ctx.body = msg;
+      return;
+    }
 
     const result = await ctx.service.user.insertUser(params);
 
@@ -132,6 +145,14 @@ class UserController extends Controller {
   async updateUser() {
     const { ctx } = this;
     const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ id: 'number', name: 'string?', username: 'string?', password: 'string?', email: 'string?' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      ctx.body = msg;
+      return;
+    }
 
     const result = await ctx.service.user.updateUser(params);
 

@@ -1,10 +1,10 @@
 const prefix = '/api/attribute/';
 // 属性模块路由
 module.exports = app => {
-  const { router, controller, middleware } = app;
+  const { router, controller } = app;
 
   // 获取所有的属性信息
-  router.post(`${prefix}getAllAttributeList`, middleware.dealQueryParam(), controller.attribute.getAllAttributeList);
+  router.post(`${prefix}getAllAttributeList`, controller.attribute.getAllAttributeList);
   // 新增属性
   router.post(`${prefix}insertAttribute`, controller.attribute.insertAttribute);
   // 编辑属性
