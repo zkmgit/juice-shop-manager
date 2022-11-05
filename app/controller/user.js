@@ -42,7 +42,7 @@ class UserController extends Controller {
   /**
     * @summary 用户列表分页查询
     * @description 用户列表分页查询
-    * @router post /api/getAllUserList
+    * @router post /api/user/getAllUserList
     * @request body UserQueryParams
     * @response 200 UserJsonBody 返回结果
   */
@@ -101,7 +101,7 @@ class UserController extends Controller {
   /**
     * @summary 用户新增
     * @description 用户新增
-    * @router post /api/insertUser
+    * @router post /api/user/insertUser
     * @request body AddUserParams
     * @response 200 JsonBody 返回结果
   */
@@ -141,7 +141,7 @@ class UserController extends Controller {
   /**
     * @summary 用户编辑
     * @description 用户编辑
-    * @router put /api/updateUser
+    * @router put /api/user/updateUser
     * @request body EditUserParams
     * @response 200 JsonBody 返回结果
   */
@@ -182,7 +182,7 @@ class UserController extends Controller {
   /**
     * @summary 根据id删除用户
     * @description 根据id删除用户
-    * @router delete /api/deleteUser/:id
+    * @router delete /api/user/deleteUser/:id
     * @Request query integer *id 用户id
     * @response 200 JsonBody 返回结果
   */

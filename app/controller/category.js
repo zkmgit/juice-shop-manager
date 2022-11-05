@@ -9,7 +9,7 @@ class CategoryController extends Controller {
   /**
     * @summary 分类列表分页查询
     * @description 分类列表分页查询
-    * @router post /api/getAllCategoryList
+    * @router post /api/category/getAllCategoryList
     * @request body CategoryQueryParams
     * @response 200 CategoryJsonBody 返回结果
   */
@@ -64,7 +64,7 @@ class CategoryController extends Controller {
   /**
     * @summary 分类新增
     * @description 分类新增
-    * @router post /api/insertCategory
+    * @router post /api/category/insertCategory
     * @request body AddCategoryParams
     * @response 200 JsonBody 返回结果
   */
@@ -104,7 +104,7 @@ class CategoryController extends Controller {
   /**
     * @summary 分类编辑
     * @description 分类编辑
-    * @router put /api/updateCategory
+    * @router put /api/category/updateCategory
     * @request body EditCategoryParams
     * @response 200 JsonBody 返回结果
   */
@@ -145,7 +145,7 @@ class CategoryController extends Controller {
   /**
     * @summary 根据id删除分类
     * @description 根据id删除分类
-    * @router delete /api/deleteCategory/:id
+    * @router delete /api/category/deleteCategory/:id
     * @Request query integer *id 分类id
     * @response 200 JsonBody 返回结果
   */

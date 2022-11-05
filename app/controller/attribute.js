@@ -9,7 +9,7 @@ class AttributeController extends Controller {
   /**
     * @summary 属性列表分页查询
     * @description 属性列表分页查询
-    * @router post /api/getAllAttributeList
+    * @router post /api/attribute/getAllAttributeList
     * @request body AttributeQueryParams
     * @response 200 AttributeJsonBody 返回结果
   */
@@ -64,7 +64,7 @@ class AttributeController extends Controller {
   /**
     * @summary 属性新增
     * @description 属性新增
-    * @router post /api/insertAttribute
+    * @router post /api/attribute/insertAttribute
     * @request body AddAttributeParams
     * @response 200 JsonBody 返回结果
   */
@@ -104,7 +104,7 @@ class AttributeController extends Controller {
   /**
     * @summary 属性编辑
     * @description 属性编辑
-    * @router put /api/updateAttribute
+    * @router put /api/attribute/updateAttribute
     * @request body EditAttributeParams
     * @response 200 JsonBody 返回结果
   */
@@ -145,7 +145,7 @@ class AttributeController extends Controller {
   /**
     * @summary 根据id删除属性
     * @description 根据id删除属性
-    * @router delete /api/deleteAttribute/:id
+    * @router delete /api/attribute/deleteAttribute/:id
     * @Request query integer *id 属性id
     * @response 200 JsonBody 返回结果
   */
