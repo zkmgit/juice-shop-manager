@@ -1,6 +1,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const { formatDateTime } = require('../extend/helper');
 /**
 * @controller 属性模块
 */
@@ -52,8 +53,9 @@ class AttributeController extends Controller {
       result: result.map(item => {
         return {
           ...item,
-          // statusName: item.status === 1 ? '启用' : item.status === 2 ? '禁用' : '',
-          // sexName: item.sex === 1 ? '男' : item.sex === 2 ? '女' : '',
+          statusName: item.status === 1 ? '启用' : item.status === 0 ? '禁用' : '',
+          createTime: formatDateTime(item.create_time),
+          updateTime: formatDateTime(item.update_time)
         };
       }),
       total,
