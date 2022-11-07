@@ -7,10 +7,16 @@ class UtilsController extends Controller {
     const { ctx } = this;
     const data = await ctx.service.utils.uploadFiles();
     if (data) {
-      ctx.body = data;
+      ctx.body = {
+        code: '1',
+        msg: '上传成功',
+        result: data
+      };
     } else {
       ctx.body = {
-        message: '上传失败',
+        code: '-1',
+        msg: '上传失败',
+        result: {}
       };
     }
   }

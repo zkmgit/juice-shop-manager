@@ -5,8 +5,8 @@ const qiniu = require('qiniu');
 const awaitWriteStream = require('await-stream-ready').write;
 const sendToWormhole = require('stream-wormhole');
 const md5 = require('md5');
-const bucket = 'juice-center'; // 要上传的空间名
-const imageUrl = 'ri3mk8eih.hn-bkt.clouddn.com'; // 空间绑定的域名
+const bucket = 'juice-center-test'; // 要上传的空间名
+const imageUrl = 'rkywhs3b8.hn-bkt.clouddn.com'; // 空间绑定的域名
 const accessKey = 'HHUwFiwAnWBjdWldP1GN9MJZb6XxvEmrGhFRGtmG'; // Access Key
 const secretKey = 'TiaCb0aUAjuAFM1uNO3KoVtvz4YKhJTmAu8Ji3xc'; // Secret Key
 const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
@@ -22,7 +22,7 @@ class UtilsService extends Service {
     const { ctx } = this;
     const stream = await ctx.getFileStream();
     const filename =
-      md5(stream.filename) + path.extname(stream.filename).toLocaleLowerCase();
+    md5(stream.filename) + path.extname(stream.filename).toLocaleLowerCase();
     const localFilePath = path.join(__dirname, '../public/uploads', filename);
     const writeStream = fs.createWriteStream(localFilePath);
     try {
