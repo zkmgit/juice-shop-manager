@@ -126,4 +126,42 @@ module.exports = {
       status: 'integer 1启用 0禁用',
     } },
   },
+  // 轮播图
+  CarouselImageJsonBody: {
+    code: { type: 'string', required: true, example: '1' },
+    msg: { type: 'string', required: true, example: 'success' },
+    result: { type: 'string', required: true, example: [
+      {
+        id: 1,
+        title: '标题',
+        image: '图片url',
+        status: 1,
+        order_num: 1,
+        is_delete: 1,
+        create_time: '2022-11-02T04:28:15.000Z',
+        update_time: '2022-11-02T04:29:06.000Z',
+      },
+    ] },
+  },
+  CarouselImageQueryParams: {
+    param: { type: 'string', required: true, example: {
+      pn: 'integer',
+      ps: 'integer',
+    } },
+  },
+  EditCarouselImageParams: {
+    param: { type: 'string', required: true, example: {
+      id: 1,
+      title: '标题',
+      image: '图片url',
+      status: 'integer 1启用 0禁用',
+    } },
+  },
+  AddCarouselImageParams: {
+    param: { type: 'string', required: true, example: {
+      title: '标题',
+      image: '图片url',
+      status: 'integer 1启用 0禁用',
+    } },
+  },
 };
