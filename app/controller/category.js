@@ -21,7 +21,12 @@ class CategoryController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      ctx.body = msg;
+      
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
       return;
     }
     // 组装查询条件
@@ -76,7 +81,12 @@ class CategoryController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      ctx.body = msg;
+      
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
       return;
     }
 
@@ -116,7 +126,12 @@ class CategoryController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      ctx.body = msg;
+      
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
       return;
     }
 

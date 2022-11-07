@@ -14,7 +14,12 @@ class UserController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      ctx.body = msg;
+
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
       return;
     }
 
@@ -55,7 +60,12 @@ class UserController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      ctx.body = msg;
+      
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
       return;
     }
 
@@ -113,7 +123,12 @@ class UserController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      ctx.body = msg;
+      
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
       return;
     }
 
@@ -153,7 +168,12 @@ class UserController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      ctx.body = msg;
+      
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
       return;
     }
 
