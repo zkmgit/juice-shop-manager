@@ -51,7 +51,7 @@ class UtilsService extends Service {
       });
       if (imgSrc !== '') {
         return {
-          url: imgSrc,
+          url: `http://${imgSrc}`,
         };
       }
       return false;
