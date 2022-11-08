@@ -36,7 +36,7 @@ class CarouselImageController extends Controller {
 
     const options = {
       where, // WHERE 条件
-      orders: [['id','desc']], // 排序方式
+      orders: [['order_num','asc']], // 排序方式
       limit: params.ps, // 返回数据量
       offset: (params.pn - 1) * params.ps, // 数据偏移量
     };
@@ -189,6 +189,43 @@ class CarouselImageController extends Controller {
         value: result.res.affectedRows,
       },
     };
+  }
+  /**
+    * @summary 轮播图批量排序
+    * @description 轮播图批量排序
+    * @router post /api/carouselImage/batchSortCarouselImage
+    * @request body BatchSortCarouselImageParams
+    * @response 200 JsonBody 返回结果
+  */
+   async batchSortCarouselImage() {
+    const { ctx } = this;
+    const params = ctx.request.body;
+
+    if (!Array.isArray(params) || params.length === 0) {
+      
+      ctx.body = {
+        code: '-1',
+        msg: '参数错误',
+        result: {},
+      };
+      return;
+    }
+
+      // 批量修改排序
+      const promiseList = params.map(param => ctx.service.carouselImage.updateCarouselImage(param))
+      
+      const resList = await Promise.all(promiseList)
+
+      ctx.body = {
+        code: '1',
+        msg: 'success',
+        result: {
+          value: resList.reduce((pre, next) => {
+            return pre + next.res.affectedRows
+          }, 0),
+        },
+      };
+
   }
 }
 

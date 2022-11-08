@@ -11,4 +11,6 @@ module.exports = app => {
   router.put(`${prefix}updateCarouselImage`, controller.carouselImage.updateCarouselImage);
   // 删除轮播图
   router.delete(`${prefix}deleteCarouselImage/:id`, controller.carouselImage.deleteCarouselImage);
+  // 批量排序轮播图
+  router.post(`${prefix}batchSortCarouselImage`, controller.carouselImage.batchSortCarouselImage);
 };

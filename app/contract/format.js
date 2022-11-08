@@ -157,6 +157,12 @@ module.exports = {
       status: 'integer 1启用 0禁用',
     } },
   },
+  BatchSortCarouselImageParams: {
+    param: { type: 'string', required: true, example: [{
+      id: 1,
+      order_num: 1,
+    }] },
+  },
   AddCarouselImageParams: {
     param: { type: 'string', required: true, example: {
       title: '标题',
