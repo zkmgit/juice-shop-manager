@@ -37,6 +37,7 @@ class CategoryController extends Controller {
     const options = {
       where, // WHERE 条件
       limit: params.ps, // 返回数据量
+      orders: [['id','desc']], // 排序方式
       offset: (params.pn - 1) * params.ps, // 数据偏移量
     };
 
