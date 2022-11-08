@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 04/11/2022 14:43:43
+ Date: 08/11/2022 18:33:18
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,7 @@ CREATE TABLE `attribute`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of attribute
@@ -51,7 +51,14 @@ CREATE TABLE `carousel_image`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of carousel_image
+-- ----------------------------
+INSERT INTO `carousel_image` VALUES (2, '轮播图2', 'http://rkywhs3b8.hn-bkt.clouddn.com/4a47a0db6e60853dedfcfdf08a5ca249.png', 1, 1, 1, '2022-11-07 12:11:06', '2022-11-08 16:20:28');
+INSERT INTO `carousel_image` VALUES (4, '轮播图3', 'http://rkywhs3b8.hn-bkt.clouddn.com/fb5c81ed3a220004b71069645f112867.png', 1, 2, 1, '2022-11-08 14:54:44', '2022-11-08 16:20:28');
+INSERT INTO `carousel_image` VALUES (5, '轮播图4', 'http://rkywhs3b8.hn-bkt.clouddn.com/f3ccdd27d2000e3f9255a7e3e2c48800.jpg', 1, 3, 1, '2022-11-08 14:55:02', '2022-11-08 16:20:28');
 
 -- ----------------------------
 -- Table structure for category
@@ -66,17 +73,17 @@ CREATE TABLE `category`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of category
 -- ----------------------------
-INSERT INTO `category` VALUES (3, '上装', 1, NULL, 1, '2022-11-01 16:42:34', '2022-11-01 16:42:34');
+INSERT INTO `category` VALUES (3, '上装', 1, '1111', 1, '2022-11-01 16:42:34', '2022-11-05 17:46:07');
 INSERT INTO `category` VALUES (4, '裤装', 1, NULL, 1, '2022-11-01 16:42:52', '2022-11-01 16:42:52');
 INSERT INTO `category` VALUES (5, '特价区', 1, NULL, 1, '2022-11-01 16:42:59', '2022-11-01 16:42:59');
 INSERT INTO `category` VALUES (6, '裙装', 1, NULL, 1, '2022-11-01 16:43:07', '2022-11-01 16:43:07');
 INSERT INTO `category` VALUES (7, '套装', 1, NULL, 1, '2022-11-01 16:43:16', '2022-11-01 16:43:16');
-INSERT INTO `category` VALUES (8, '外套', 1, NULL, 1, '2022-11-01 16:43:21', '2022-11-01 16:43:21');
+INSERT INTO `category` VALUES (8, '外套', 1, '123', 1, '2022-11-01 16:43:21', '2022-11-05 17:46:10');
 INSERT INTO `category` VALUES (9, '秒杀', 1, NULL, 1, '2022-11-01 16:43:27', '2022-11-01 16:43:27');
 INSERT INTO `category` VALUES (10, '内裤', 1, NULL, 1, '2022-11-01 16:43:32', '2022-11-01 16:43:32');
 INSERT INTO `category` VALUES (11, '袜子', 1, NULL, 1, '2022-11-01 16:43:38', '2022-11-01 16:43:38');
@@ -120,12 +127,13 @@ CREATE TABLE `user`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'kay', 'admin', '123456', 1, 1, '2821800369@qq.com', 1, '2022-10-31 12:22:09', '2022-10-31 12:24:43');
 INSERT INTO `user` VALUES (2, 'tinger.', 'ting111', '123456', 1, 1, NULL, 1, '2022-10-31 12:25:59', '2022-10-31 12:26:13');
+INSERT INTO `user` VALUES (3, 'test222', 'admintest', '123456', 1, 1, NULL, 1, '2022-11-04 15:57:52', '2022-11-04 15:58:53');
 
 SET FOREIGN_KEY_CHECKS = 1;
