@@ -170,4 +170,14 @@ module.exports = {
       status: 'integer 1启用 0禁用',
     } },
   },
+  SystemSelectJsonBody: {
+    code: { type: 'string', required: true, example: '1' },
+    msg: { type: 'string', required: true, example: 'success' },
+    result: { type: 'string', required: true, example: [
+      {
+       label: '',
+       value: '',
+      },
+    ] },
+  }
 };
