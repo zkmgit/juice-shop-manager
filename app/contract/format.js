@@ -179,5 +179,67 @@ module.exports = {
        value: '',
       },
     ] },
-  }
+  },
+  // 产品
+  ProductJsonBody: {
+    code: { type: 'string', required: true, example: '1' },
+    msg: { type: 'string', required: true, example: 'success' },
+    result: { type: 'string', required: true, example: [
+      {
+        id: 'id',
+        spu: 'SPU(当前日期 20221031+【产品数量+1】) 11位数',
+        title: '商品名称',
+        image:'主图',
+        price: '价格',
+        details_img: '商品详情图片',
+        status:'商品状态 1启用 0 禁用',
+        category_id: '类目id',
+        categoryName: '类目名称',
+        inventory: '库存',
+        attributes: '属性（尺码，规格，颜色）',
+        attributesName: '属性值',
+        remark: '商品描述',
+        is_delete: '软删除 1未删除 0删除',
+        create_time: '创建时间',
+        update_time: '修改时间',
+      },
+    ] },
+  },
+  ProductQueryParams: {
+    param: { type: 'string', required: true, example: {
+      pn: 'integer',
+      ps: 'integer',
+    } },
+  },
+  EditProductParams: {
+    param: { type: 'string', required: true, example: {
+      id: 1,
+      title: '商品名称',
+      image:'主图',
+      price: '价格',
+      details_img: '商品详情图片',
+      status:'商品状态 1启用 0 禁用',
+      category_id: '类目id',
+      categoryName: '类目名称',
+      inventory: '库存',
+      attributes: '属性（尺码，规格，颜色）',
+      attributesName: '属性值',
+      remark: '商品描述',
+    } },
+  },
+  AddProductParams: {
+    param: { type: 'string', required: true, example: {
+      title: '商品名称',
+      image:'主图',
+      price: '价格',
+      details_img: '商品详情图片',
+      status:'商品状态 1启用 0 禁用',
+      category_id: '类目id',
+      categoryName: '类目名称',
+      inventory: '库存',
+      attributes: '属性（尺码，规格，颜色）',
+      attributesName: '属性值',
+      remark: '商品描述',
+    } },
+  },
 };

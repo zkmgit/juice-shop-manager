@@ -6,8 +6,9 @@
  * attribute 属性模块
  * carouselImage 轮播图模块
  * system 系统公用下拉模块
+ * product 产品模块
  */
-const routerFileNames = [ 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system' ];
+const routerFileNames = [ 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product' ];
 /**
  * @param {Egg.Application} app - egg application
  */
