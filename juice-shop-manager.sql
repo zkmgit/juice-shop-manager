@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 08/11/2022 18:33:18
+ Date: 11/11/2022 18:37:07
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,7 @@ CREATE TABLE `attribute`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of attribute
@@ -51,14 +51,15 @@ CREATE TABLE `carousel_image`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of carousel_image
 -- ----------------------------
-INSERT INTO `carousel_image` VALUES (2, '轮播图2', 'http://rkywhs3b8.hn-bkt.clouddn.com/4a47a0db6e60853dedfcfdf08a5ca249.png', 1, 1, 1, '2022-11-07 12:11:06', '2022-11-08 16:20:28');
-INSERT INTO `carousel_image` VALUES (4, '轮播图3', 'http://rkywhs3b8.hn-bkt.clouddn.com/fb5c81ed3a220004b71069645f112867.png', 1, 2, 1, '2022-11-08 14:54:44', '2022-11-08 16:20:28');
-INSERT INTO `carousel_image` VALUES (5, '轮播图4', 'http://rkywhs3b8.hn-bkt.clouddn.com/f3ccdd27d2000e3f9255a7e3e2c48800.jpg', 1, 3, 1, '2022-11-08 14:55:02', '2022-11-08 16:20:28');
+INSERT INTO `carousel_image` VALUES (2, '轮播图2', 'https://img.alicdn.com/imgextra/i1/6000000005074/O1CN01VSanHD1nLwQQCOIvy_!!6000000005074-0-octopus.jpg', 1, 1, 1, '2022-11-07 12:11:06', '2022-11-09 11:56:39');
+INSERT INTO `carousel_image` VALUES (4, '轮播图3', 'https://img.alicdn.com/imgextra/i1/6000000005074/O1CN01VSanHD1nLwQQCOIvy_!!6000000005074-0-octopus.jpg', 1, 2, 1, '2022-11-08 14:54:44', '2022-11-09 11:57:01');
+INSERT INTO `carousel_image` VALUES (5, '轮播图4', 'https://img.alicdn.com/imgextra/i1/6000000005074/O1CN01VSanHD1nLwQQCOIvy_!!6000000005074-0-octopus.jpg', 1, 3, 1, '2022-11-08 14:55:02', '2022-11-09 11:57:03');
+INSERT INTO `carousel_image` VALUES (6, '轮播图5', 'https://img.alicdn.com/imgextra/i1/6000000005074/O1CN01VSanHD1nLwQQCOIvy_!!6000000005074-0-octopus.jpg', 1, 9999, 1, '2022-11-09 11:15:39', '2022-11-09 11:57:05');
 
 -- ----------------------------
 -- Table structure for category
@@ -73,7 +74,7 @@ CREATE TABLE `category`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of category
@@ -102,8 +103,10 @@ CREATE TABLE `product`  (
   `details_img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '商品详情图片',
   `status` int(0) DEFAULT 1 COMMENT '商品状态 1启用 0 禁用',
   `category_id` int(0) DEFAULT NULL COMMENT '类目id',
+  `categoryName` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '类目名称',
   `inventory` int(0) DEFAULT 10 COMMENT '库存',
   `attributes` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '属性（尺码，规格，颜色）',
+  `attributesName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '属性名称',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '商品描述',
   `is_delete` int(0) DEFAULT 1 COMMENT '软删除 1未删除 0删除',
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
