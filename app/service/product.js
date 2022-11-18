@@ -13,7 +13,7 @@ class ProductService extends Service {
   async getProductTotal() {
     const total = await this.app.mysql.query('select count(*) as total from product');
 
-    return { total };
+    return { total: total[0].total };
   }
   // 新增产品
   async insertProduct(params) {
