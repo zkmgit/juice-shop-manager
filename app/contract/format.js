@@ -242,4 +242,56 @@ module.exports = {
       remark: '商品描述',
     } },
   },
+  // 购物车
+  ShoppingCartJsonBody: {
+    code: { type: 'string', required: true, example: '1' },
+    msg: { type: 'string', required: true, example: 'success' },
+    result: { type: 'string', required: true, example: [
+      {
+        id: 1,
+        user_id: '用户id',
+        product_id: '产品id',
+        spu: "产品标识",
+        title: "吹风机2",
+        price: '产品数量',
+        quantity: '产品数量',
+        specifications: "产品规格",
+        product_image: "产品主图",
+        is_delete: "软删除",
+        create_time: "创建时间",
+        update_time: "修改时间",
+      },
+    ] },
+  },
+  ShoppingCartQueryParams: {
+    param: { type: 'string', required: true, example: {
+      pn: 'integer',
+      ps: 'integer',
+    } },
+  },
+  EditShoppingCartParams: {
+    param: { type: 'string', required: true, example: {
+      id: 1,
+      user_id: '用户id',
+      product_id: '产品id',
+      spu: "产品标识",
+      title: "吹风机2",
+      price: '产品数量',
+      quantity: '产品数量',
+      specifications: "产品规格",
+      product_image: "产品主图",
+    } },
+  },
+  AddShoppingCartParams: {
+    param: { type: 'string', required: true, example: {
+      user_id: '用户id',
+      product_id: '产品id',
+      spu: "产品标识",
+      title: "吹风机2",
+      price: '产品数量',
+      quantity: '产品数量',
+      specifications: "产品规格",
+      product_image: "产品主图",
+    } },
+  },
 };
