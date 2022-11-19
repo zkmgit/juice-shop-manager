@@ -78,7 +78,7 @@ class CategoryController extends Controller {
     const { ctx } = this;
     const params = ctx.request.body;
     // 字段校验
-    const validate = this.app.validator.validate({ category_name: 'string', status: 'number', remark: 'string?' }, params);
+    const validate = this.app.validator.validate({ category_name: 'string', image: 'string', status: 'number', remark: 'string?' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
@@ -123,7 +123,7 @@ class CategoryController extends Controller {
     const { ctx } = this;
     const params = ctx.request.body;
     // 字段校验
-    const validate = this.app.validator.validate({ id: 'number', category_name: 'string', status: 'number', remark: 'string?' }, params);
+    const validate = this.app.validator.validate({ id: 'number', category_name: 'string', image: 'string', status: 'number', remark: 'string?' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
