@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 11/11/2022 18:37:07
+ Date: 19/11/2022 14:34:54
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,7 @@ CREATE TABLE `attribute`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of attribute
@@ -68,27 +68,28 @@ DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category`  (
   `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '分类id',
   `category_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '分类名称',
+  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '分类图片',
   `status` int(0) DEFAULT 1 COMMENT '状态 1 启用 0禁用',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '备注',
   `is_delete` int(0) DEFAULT 1 COMMENT '软删除 1未删除 0删除',
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of category
 -- ----------------------------
-INSERT INTO `category` VALUES (3, '上装', 1, '1111', 1, '2022-11-01 16:42:34', '2022-11-05 17:46:07');
-INSERT INTO `category` VALUES (4, '裤装', 1, NULL, 1, '2022-11-01 16:42:52', '2022-11-01 16:42:52');
-INSERT INTO `category` VALUES (5, '特价区', 1, NULL, 1, '2022-11-01 16:42:59', '2022-11-01 16:42:59');
-INSERT INTO `category` VALUES (6, '裙装', 1, NULL, 1, '2022-11-01 16:43:07', '2022-11-01 16:43:07');
-INSERT INTO `category` VALUES (7, '套装', 1, NULL, 1, '2022-11-01 16:43:16', '2022-11-01 16:43:16');
-INSERT INTO `category` VALUES (8, '外套', 1, '123', 1, '2022-11-01 16:43:21', '2022-11-05 17:46:10');
-INSERT INTO `category` VALUES (9, '秒杀', 1, NULL, 1, '2022-11-01 16:43:27', '2022-11-01 16:43:27');
-INSERT INTO `category` VALUES (10, '内裤', 1, NULL, 1, '2022-11-01 16:43:32', '2022-11-01 16:43:32');
-INSERT INTO `category` VALUES (11, '袜子', 1, NULL, 1, '2022-11-01 16:43:38', '2022-11-01 16:43:38');
-INSERT INTO `category` VALUES (12, '鞋', 1, NULL, 1, '2022-11-01 16:43:42', '2022-11-01 16:43:42');
+INSERT INTO `category` VALUES (3, '上装', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, '1111', 1, '2022-11-01 16:42:34', '2022-11-19 14:27:33');
+INSERT INTO `category` VALUES (4, '裤装', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:42:52', '2022-11-19 14:27:34');
+INSERT INTO `category` VALUES (5, '特价区', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:42:59', '2022-11-19 14:27:35');
+INSERT INTO `category` VALUES (6, '裙装', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:43:07', '2022-11-19 14:27:36');
+INSERT INTO `category` VALUES (7, '套装', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:43:16', '2022-11-19 14:27:38');
+INSERT INTO `category` VALUES (8, '外套', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, '123', 1, '2022-11-01 16:43:21', '2022-11-19 14:27:37');
+INSERT INTO `category` VALUES (9, '秒杀', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:43:27', '2022-11-19 14:27:39');
+INSERT INTO `category` VALUES (10, '内裤', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:43:32', '2022-11-19 14:27:40');
+INSERT INTO `category` VALUES (11, '袜子', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:43:38', '2022-11-19 14:27:41');
+INSERT INTO `category` VALUES (12, '鞋', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:43:42', '2022-11-19 14:27:43');
 
 -- ----------------------------
 -- Table structure for product
@@ -112,7 +113,34 @@ CREATE TABLE `product`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for shopping_cart
+-- ----------------------------
+DROP TABLE IF EXISTS `shopping_cart`;
+CREATE TABLE `shopping_cart`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '购物车id',
+  `user_id` int(0) DEFAULT NULL COMMENT '用户id',
+  `product_id` int(0) DEFAULT NULL COMMENT '产品id',
+  `spu` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '产品标识',
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '产品标题',
+  `price` decimal(10, 2) DEFAULT NULL COMMENT '产品价格',
+  `quantity` int(0) DEFAULT NULL COMMENT '购买数量',
+  `specifications` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '产品规格值，采用json数组格式',
+  `product_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '产品主图',
+  `is_delete` int(0) DEFAULT 1 COMMENT '购物车软删除 1 0',
+  `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of shopping_cart
+-- ----------------------------
+INSERT INTO `shopping_cart` VALUES (1, 2, 2, '202200002', '吹风机2', 102.00, 12, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-18 17:54:58', '2022-11-18 17:56:34');
+INSERT INTO `shopping_cart` VALUES (2, 2, 2, '202200002', '吹风机2', 102.00, 17, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-19 09:49:12', '2022-11-19 09:50:59');
+INSERT INTO `shopping_cart` VALUES (3, 2, 2, '202200002', '吹风机2', 102.00, 12, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 1, '2022-11-19 09:51:04', '2022-11-19 09:51:04');
 
 -- ----------------------------
 -- Table structure for user
