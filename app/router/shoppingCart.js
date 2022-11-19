@@ -6,6 +6,8 @@ module.exports = app => {
 
   // 获取所有的购物车信息
   router.post(`${prefix}getAllShoppingCartList`, controller.shoppingCart.getAllShoppingCartList);
+  // 新增和保存购物车
+  router.post(`${prefix}insertAndSaveShoppingCart`, controller.shoppingCart.insertAndSaveShoppingCart);
   // 新增购物车
   router.post(`${prefix}insertShoppingCart`, controller.shoppingCart.insertShoppingCart);
   // 编辑购物车
