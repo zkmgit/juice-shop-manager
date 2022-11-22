@@ -8,8 +8,9 @@
  * system 系统公用下拉模块
  * product 产品模块
  * shoppingCart 购物车模块
+ * order 订单模块
  */
-const routerFileNames = [ 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart' ];
+const routerFileNames = [ 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order' ];
 /**
  * @param {Egg.Application} app - egg application
  */

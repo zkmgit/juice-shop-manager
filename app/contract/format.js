@@ -294,4 +294,49 @@ module.exports = {
       product_image: "产品主图",
     } },
   },
+  // 订单
+  OrderJsonBody: {
+    code: { type: 'string', required: true, example: '1' },
+    msg: { type: 'string', required: true, example: 'success' },
+    result: { type: 'string', required: true, example: [
+      {
+        id: '订单id',
+        order_number: '订单编号（J-当前日期8位数+10000递增）',
+        user_id: '用户id',
+        cart_ids: '购物车ids',
+        cartInfoList: '购物车信息',
+        total_amount: '订单总金额',
+        total_quantity: '订单产品总数量',
+        status: '订单状态',
+        receiver: '收货人',
+        address: '详细收货地址',
+        phone: '收货人电话',
+        remark: '订单备注',
+        is_delete: "软删除",
+        create_time: "创建时间",
+        update_time: "修改时间",
+      },
+    ] },
+  },
+  OrderQueryParams: {
+    param: { type: 'string', required: true, example: {
+      pn: 'integer',
+      ps: 'integer',
+    } },
+  },
+  EditOrderParams: {
+    param: { type: 'string', required: true, example: {
+      id: 1,
+      status: '订单状态',
+    } },
+  },
+  AddOrderParams: {
+    param: { type: 'string', required: true, example: {
+      cartInfoList: '购物车信息',
+      receiver: '收货人',
+      address: '收货地址', 
+      phone: '电话',
+      remark: '订单备注'
+    } },
+  },
 };
