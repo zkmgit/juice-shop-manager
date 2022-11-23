@@ -3,8 +3,8 @@ const Service = require('egg').Service;
 
 class OrderService extends Service {
   // 获取所有的订单信息
-  async getAllOrderList(options) {
-    const result = await this.app.mysql.select('order', options);
+  async getAllOrderList(sql) {
+    const result = await this.app.mysql.query(sql);
     const total = await this.app.mysql.query('select count(*) as total from `order`');
 
     return { result, total: total[0].total };

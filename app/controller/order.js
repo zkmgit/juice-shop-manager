@@ -31,20 +31,24 @@ class OrderController extends Controller {
       return;
     }
 
+    const prefix = 'SELECT o.id, o.order_number, o.user_id, o.cart_ids, o.total_amount, o.total_quantity, o.status, o.receiver, o.address, o.phone, o.is_delete, o.remark, o.create_time, o.update_time FROM `order` AS o'
+    const suffix = `ORDER BY id DESC limit ${params.ps} offset ${(params.pn - 1) * params.ps}`
+    let buildSql = ''
 
-    // 组装查询条件
-    const where = Object.keys(params).filter(key => ![ 'ps', 'pn' ].includes(key)).reduce((pre, next) => {
-      return { ...pre, [next]: params[next] };
-    }, {});
+    Object.keys(params).filter(key => !['ps', 'pn'].includes(key)).forEach(key => {
+      if (['id', 'order_number', 'user_id', 'status', 'is_delete'].includes(key)) {
+        if (buildSql !== '') {
+          buildSql = `${buildSql} AND ${key} = '${params[key]}'`
+        } else {
+          buildSql = `Where ${key} = '${params[key]}'`
+        }
+      }
+    })
 
-    const options = {
-      where, // WHERE 条件
-      orders: [['id','desc']], // 排序方式
-      limit: params.ps, // 返回数据量
-      offset: (params.pn - 1) * params.ps, // 数据偏移量
-    };
+    // 组装sql语句
+    const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
-    const { result, total } = await ctx.service.order.getAllOrderList(options);
+    const { result, total } = await ctx.service.order.getAllOrderList(sql);
 
     if (!result) {
       ctx.body = {

@@ -320,6 +320,11 @@ module.exports = {
   },
   OrderQueryParams: {
     param: { type: 'string', required: true, example: {
+      id: '订单id',
+      order_number: '订单编号',
+      user_id: '用户id',
+      status: '订单状态',
+      is_delete: '是否删除',
       pn: 'integer',
       ps: 'integer',
     } },
