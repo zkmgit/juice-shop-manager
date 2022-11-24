@@ -26,6 +26,11 @@ module.exports = {
   },
   UserQueryParams: {
     param: { type: 'string', required: true, example: {
+      id: 'id',
+      is_delete: '是否删除 未删除1 删除0',
+      status: '状态',
+      name: '姓名',
+      username: '用户名',
       pn: 'integer',
       ps: 'integer',
     } },

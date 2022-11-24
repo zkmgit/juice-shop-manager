@@ -69,20 +69,24 @@ class UserController extends Controller {
       return;
     }
 
+    // sql组装
+    const prefix = 'SELECT u.id,u.name,u.username,u.password,u.sex,u.status,u.email,u.is_delete,u.create_time,u.update_time FROM user AS u';
+    const suffix = `ORDER BY id DESC limit ${params.ps} offset ${(params.pn - 1) * params.ps}`;
+    let buildSql = ''
+    
+    Object.keys(params).filter(key => !['ps', 'pn'].includes(key)).forEach(key => {
+      if (['id', 'is_delete', 'status', 'username'].includes(key)) {
+        buildSql = buildSql !== '' ? `${buildSql} AND ${key} = '${params[key]}'` : `Where ${key} = '${params[key]}'`
+      } else  if (['name'].includes(key)) {
+        // 模糊查询的字段
+        buildSql = buildSql !== '' ? `${buildSql} AND ${key} LIKE '%${params[key]}%'` : `Where ${key} LIKE '%${params[key]}%'`
+      }
+    })
 
-    // 组装查询条件
-    const where = Object.keys(params).filter(key => ![ 'ps', 'pn' ].includes(key)).reduce((pre, next) => {
-      return { ...pre, [next]: params[next] };
-    }, {});
+    // 组装sql语句
+    const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
-    const options = {
-      where, // WHERE 条件
-      orders: [['id','desc']], // 排序方式
-      limit: params.ps, // 返回数据量
-      offset: (params.pn - 1) * params.ps, // 数据偏移量
-    };
-
-    const { result, total } = await ctx.service.user.getAllUserList(options);
+    const { result, total } = await ctx.service.user.getAllUserList(sql);
 
     if (!result) {
       ctx.body = {
