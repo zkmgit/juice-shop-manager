@@ -265,6 +265,12 @@ module.exports = {
   },
   ShoppingCartQueryParams: {
     param: { type: 'string', required: true, example: {
+      id: '购物车id',
+      user_id: '用户id',
+      spu: '产品spu',
+      is_delete: '是否删除 未删除1 删除0',
+      specifications: '产品规则',
+      title: '产品名称',
       pn: 'integer',
       ps: 'integer',
     } },
@@ -324,7 +330,7 @@ module.exports = {
       order_number: '订单编号',
       user_id: '用户id',
       status: '订单状态',
-      is_delete: '是否删除',
+      is_delete: '是否删除 未删除1 删除0',
       pn: 'integer',
       ps: 'integer',
     } },

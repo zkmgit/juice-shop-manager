@@ -43,8 +43,32 @@ class ShoppingCartController extends Controller {
       limit: params.ps, // 返回数据量
       offset: (params.pn - 1) * params.ps, // 数据偏移量
     };
+    // sql组装
+    const prefix = 'SELECT s.id,s.user_id,s.product_id,s.spu,s.title,s.price,s.quantity,s.specifications,s.product_image,s.is_delete,s.create_time,s.update_time FROM `shopping_cart` AS s'
+    const suffix = `ORDER BY id DESC limit ${params.ps} offset ${(params.pn - 1) * params.ps}`
+    let buildSql = ''
 
-    const { result, total } = await ctx.service.shoppingCart.getAllShoppingCartList(options);
+    Object.keys(params).filter(key => !['ps', 'pn'].includes(key)).forEach(key => {
+      if (['id', 'user_id', 'spu', 'is_delete'].includes(key)) {
+        if (buildSql !== '') {
+          buildSql = `${buildSql} AND ${key} = '${params[key]}'`
+        } else {
+          buildSql = `Where ${key} = '${params[key]}'`
+        }
+      } else  if (['specifications', 'title'].includes(key)) {
+        // 模糊查询的字段
+        if (buildSql !== '') {
+          buildSql = `${buildSql} AND ${key} LIKE '%${params[key]}%'`
+        } else {
+          buildSql = `Where ${key} LIKE '%${params[key]}%'`
+        }
+      }
+    })
+
+    // 组装sql语句
+    const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
+
+    const { result, total } = await ctx.service.shoppingCart.getAllShoppingCartList(sql);
 
     if (!result) {
       ctx.body = {
