@@ -145,6 +145,11 @@ module.exports = {
   },
   CarouselImageQueryParams: {
     param: { type: 'string', required: true, example: {
+      id: '轮播图id',
+      is_delete: '是否删除 未删除1 删除0',
+      status: '轮播图状态',
+      order_num: '排序',
+      title: '轮播图名称',
       pn: 'integer',
       ps: 'integer',
     } },

@@ -3,8 +3,8 @@ const Service = require('egg').Service;
 
 class CarouselImageService extends Service {
   // 获取所有的轮播图信息
-  async getAllCarouselImageList(options) {
-    const result = await this.app.mysql.select('carousel_image', options);
+  async getAllCarouselImageList(sql) {
+    const result = await this.app.mysql.query(sql);
     const total = await this.app.mysql.query('select count(*) as total from carousel_image');
 
     return { result, total: total[0].total };

@@ -30,19 +30,6 @@ class ProductController extends Controller {
       };
       return;
     }
-
-
-    // 组装查询条件
-    const where = Object.keys(params).filter(key => ![ 'ps', 'pn' ].includes(key)).reduce((pre, next) => {
-      return { ...pre, [next]: params[next] };
-    }, {});
-
-    const options = {
-      where, // WHERE 条件
-      orders: [['id','desc']], // 排序方式
-      limit: params.ps, // 返回数据量
-      offset: (params.pn - 1) * params.ps, // 数据偏移量
-    };
     
     // sql组装
     const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p'
