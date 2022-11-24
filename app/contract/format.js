@@ -207,6 +207,12 @@ module.exports = {
   },
   ProductQueryParams: {
     param: { type: 'string', required: true, example: {
+      id: '产品id',
+      spu: '产品spu',
+      is_delete: '是否删除 未删除1 删除0',
+      status: '产品状态',
+      category_id: '类目id',
+      title: '产品名称',
       pn: 'integer',
       ps: 'integer',
     } },

@@ -43,8 +43,25 @@ class ProductController extends Controller {
       limit: params.ps, // 返回数据量
       offset: (params.pn - 1) * params.ps, // 数据偏移量
     };
+    
+    // sql组装
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p'
+    const suffix = `ORDER BY id DESC limit ${params.ps} offset ${(params.pn - 1) * params.ps}`
+    let buildSql = ''
+    
+    Object.keys(params).filter(key => !['ps', 'pn'].includes(key)).forEach(key => {
+      if (['id', 'spu', 'is_delete', 'status', 'category_id'].includes(key)) {
+        buildSql = buildSql !== '' ? `${buildSql} AND ${key} = '${params[key]}'` : `Where ${key} = '${params[key]}'`
+      } else  if (['title'].includes(key)) {
+        // 模糊查询的字段
+        buildSql = buildSql !== '' ? `${buildSql} AND ${key} LIKE '%${params[key]}%'` : `Where ${key} LIKE '%${params[key]}%'`
+      }
+    })
 
-    const { result, total } = await ctx.service.product.getAllProductList(options);
+    // 组装sql语句
+    const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
+
+    const { result, total } = await ctx.service.product.getAllProductList(sql);
 
     if (!result) {
       ctx.body = {
