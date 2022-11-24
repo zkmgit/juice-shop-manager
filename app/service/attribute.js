@@ -3,8 +3,8 @@ const Service = require('egg').Service;
 
 class AttributeService extends Service {
   // 获取所有的属性信息
-  async getAllAttributeList(options) {
-    const result = await this.app.mysql.select('attribute', options);
+  async getAllAttributeList(sql) {
+    const result = await this.app.mysql.query(sql);
     const total = await this.app.mysql.query('select count(*) as total from attribute');
 
     return { result, total: total[0].total };

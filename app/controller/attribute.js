@@ -29,19 +29,25 @@ class AttributeController extends Controller {
       };
       return;
     }
-    // 组装查询条件
-    const where = Object.keys(params).filter(key => ![ 'ps', 'pn' ].includes(key)).reduce((pre, next) => {
-      return { ...pre, [next]: params[next] };
-    }, {});
 
-    const options = {
-      where, // WHERE 条件
-      orders: [['id','desc']], // 排序方式
-      limit: params.ps, // 返回数据量
-      offset: (params.pn - 1) * params.ps, // 数据偏移量
-    };
+     // sql组装
+     const prefix = 'SELECT a.id,a.attribute_name,a.attribute_value,a.status,a.is_delete,a.create_time,a.update_time FROM attribute AS a'
+     const suffix = `ORDER BY id DESC limit ${params.ps} offset ${(params.pn - 1) * params.ps}`
+     let buildSql = ''
+     
+     Object.keys(params).filter(key => !['ps', 'pn'].includes(key)).forEach(key => {
+       if (['id', 'is_delete', 'status'].includes(key)) {
+         buildSql = buildSql !== '' ? `${buildSql} AND ${key} = '${params[key]}'` : `Where ${key} = '${params[key]}'`
+       } else  if (['attribute_name'].includes(key)) {
+         // 模糊查询的字段
+         buildSql = buildSql !== '' ? `${buildSql} AND ${key} LIKE '%${params[key]}%'` : `Where ${key} LIKE '%${params[key]}%'`
+       }
+     })
+ 
+     // 组装sql语句
+     const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
-    const { result, total } = await ctx.service.attribute.getAllAttributeList(options);
+    const { result, total } = await ctx.service.attribute.getAllAttributeList(sql);
 
     if (!result) {
       ctx.body = {

@@ -107,6 +107,10 @@ module.exports = {
   },
   AttributeQueryParams: {
     param: { type: 'string', required: true, example: {
+      id: 'id',
+      is_delete: '是否删除 未删除1 删除0',
+      status: '状态',
+      attribute_name: '属性名称',
       pn: 'integer',
       ps: 'integer',
     } },
