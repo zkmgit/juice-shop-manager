@@ -14,16 +14,12 @@ class SystemController extends Controller {
   async carouselImageList() {
     const { ctx } = this;
 
-    const options = {
-      where: {
-        status: 1
-      },
-      orders: [['order_num','asc']], // 排序方式
-      limit: 3, // 返回数据量
-      offset: 0, // 数据偏移量
-    };
+    // sql组装
+    const prefix = 'SELECT c.id,c.title,c.image,c.status,c.order_num,c.is_delete,c.create_time,c.update_time FROM carousel_image AS c'
+    const suffix = ` Where status = '1' ORDER BY order_num ASC limit 3 offset 0`
+    const sql = prefix + suffix
 
-    const { result } = await ctx.service.carouselImage.getAllCarouselImageList(options);
+    const { result } = await ctx.service.carouselImage.getAllCarouselImageList(sql);
 
     if (!result) {
       ctx.body = {
@@ -54,16 +50,13 @@ class SystemController extends Controller {
   */
    async categoryList() {
     const { ctx } = this;
-    
-    const options = {
-      where: {
-        status: 1
-      },
-      limit: 999, // 返回数据量
-      offset: 0, // 数据偏移量
-    };
 
-    const { result } = await ctx.service.category.getAllCategoryList(options);
+    // sql组装
+    const prefix = 'SELECT c.id,c.category_name,c.image,c.status,c.remark,c.is_delete,c.create_time,c.update_time FROM category AS c';
+    const suffix = ` Where status = '1' limit 999 offset 0`;
+    const sql = prefix + suffix
+
+    const { result } = await ctx.service.category.getAllCategoryList(sql);
 
     if (!result) {
       ctx.body = {
@@ -93,16 +86,13 @@ class SystemController extends Controller {
   */
    async userList() {
     const { ctx } = this;
-    
-    const options = {
-      where: {
-        status: 1
-      },
-      limit: 999, // 返回数据量
-      offset: 0, // 数据偏移量
-    };
 
-    const { result } = await ctx.service.user.getAllUserList(options);
+    // sql组装
+    const prefix = 'SELECT u.id,u.name,u.username,u.password,u.sex,u.status,u.email,u.is_delete,u.create_time,u.update_time FROM user AS u';
+    const suffix = ` Where status = '1' limit 999 offset 0`;
+    const sql = prefix + suffix
+
+    const { result } = await ctx.service.user.getAllUserList(sql);
 
     if (!result) {
       ctx.body = {
@@ -132,16 +122,13 @@ class SystemController extends Controller {
   */
    async attributeList() {
     const { ctx } = this;
-    
-    const options = {
-      where: {
-        status: 1
-      },
-      limit: 999, // 返回数据量
-      offset: 0, // 数据偏移量
-    };
 
-    const { result } = await ctx.service.attribute.getAllAttributeList(options);
+     // sql组装
+     const prefix = 'SELECT a.id,a.attribute_name,a.attribute_value,a.status,a.is_delete,a.create_time,a.update_time FROM attribute AS a'
+     const suffix = ` Where status = '1' limit 999 offset 0`;
+     const sql = prefix + suffix
+
+    const { result } = await ctx.service.attribute.getAllAttributeList(sql);
 
     if (!result) {
       ctx.body = {

@@ -2,7 +2,7 @@
 
 const Controller = require('egg').Controller;
 /**
-* @controller 测试控制器
+* @controller Juice小程序接口文档
 */
 class HomeController extends Controller {
   /**

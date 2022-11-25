@@ -61,9 +61,13 @@ class OrderController extends Controller {
     }
 
     const promiseList = result.map(item => {
-      const ids = item.cart_ids.split(',')
+      // sql组装
+      const cart_prefix = 'SELECT s.id,s.user_id,s.product_id,s.spu,s.title,s.price,s.quantity,s.specifications,s.product_image,s.is_delete,s.create_time,s.update_time FROM `shopping_cart` AS s'
+      const cart_suffix = ` Where id in (${item.cart_ids}) limit 999 offset 0`
 
-      return ctx.service.shoppingCart.getAllShoppingCartList({ limit: 999, offset: 0, where: { id: ids } });
+      const cart_sql = `${cart_prefix}${cart_suffix}`
+
+      return ctx.service.shoppingCart.getAllShoppingCartList(cart_sql);
     })
 
     const cartInfos = await Promise.all(promiseList);

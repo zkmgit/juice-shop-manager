@@ -116,7 +116,13 @@ class ShoppingCartController extends Controller {
       offset: 0, // 数据偏移量
     };
 
-    const res = await ctx.service.shoppingCart.getAllShoppingCartList(options);
+    // sql组装
+    const prefix = 'SELECT s.id,s.user_id,s.product_id,s.spu,s.title,s.price,s.quantity,s.specifications,s.product_image,s.is_delete,s.create_time,s.update_time FROM `shopping_cart` AS s'
+    const suffix = ` Where user_id = '${params.user_id}' AND product_id = '${params.product_id}' AND is_delete = '1' limit 10 offset 0`
+
+    const sql = `${prefix}${suffix}`
+
+    const res = await ctx.service.shoppingCart.getAllShoppingCartList(sql);
 
     let result = null;
     //  检测是否已经加入当前用户的购物车，有则直接加该产品的数量
