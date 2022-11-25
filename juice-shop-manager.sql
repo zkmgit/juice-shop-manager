@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 19/11/2022 14:34:54
+ Date: 25/11/2022 15:57:44
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,8 @@ CREATE TABLE `attribute`  (
   `is_delete` int(0) DEFAULT 1 COMMENT '软删除 1未删除 0删除',
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `attribute_name`(`attribute_name`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -50,7 +51,8 @@ CREATE TABLE `carousel_image`  (
   `is_delete` int(0) DEFAULT 1 COMMENT '软删除 1未删除 0 删除',
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `title`(`title`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -74,7 +76,8 @@ CREATE TABLE `category`  (
   `is_delete` int(0) DEFAULT 1 COMMENT '软删除 1未删除 0删除',
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `category_name`(`category_name`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -90,6 +93,34 @@ INSERT INTO `category` VALUES (9, '秒杀', 'https://wpimg.wallstcn.com/f778738c
 INSERT INTO `category` VALUES (10, '内裤', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:43:32', '2022-11-19 14:27:40');
 INSERT INTO `category` VALUES (11, '袜子', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:43:38', '2022-11-19 14:27:41');
 INSERT INTO `category` VALUES (12, '鞋', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:43:42', '2022-11-19 14:27:43');
+
+-- ----------------------------
+-- Table structure for order
+-- ----------------------------
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '订单id',
+  `order_number` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '订单编号（J-当前日期8位数+10000递增）',
+  `user_id` int(0) DEFAULT NULL COMMENT '用户id',
+  `cart_ids` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '购物车ids',
+  `total_amount` decimal(10, 2) DEFAULT NULL COMMENT '订单总金额',
+  `total_quantity` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '订单产品总数量',
+  `status` int(0) DEFAULT 1 COMMENT '订单状态',
+  `receiver` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '收货人',
+  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '详细收货地址',
+  `phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '收货人电话',
+  `is_delete` int(0) DEFAULT 1 COMMENT '软删除 1 未删除 0 已删除',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '订单备注',
+  `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `order_number`(`order_number`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of order
+-- ----------------------------
+INSERT INTO `order` VALUES (2, 'J-2022112210000', 1, '3,2,1', 3000.00, '30', 1, 'kay.', '深圳龙岗坂田', '123456789', 1, '这是一个测试订单', '2022-11-22 17:59:19', '2022-11-22 17:59:19');
 
 -- ----------------------------
 -- Table structure for product
@@ -112,8 +143,15 @@ CREATE TABLE `product`  (
   `is_delete` int(0) DEFAULT 1 COMMENT '软删除 1未删除 0删除',
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `title`(`title`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of product
+-- ----------------------------
+INSERT INTO `product` VALUES (2, '123', 'aa', 'aaa', 10.00, NULL, 1, 1, NULL, 10, '1', NULL, NULL, 1, '2022-11-24 12:14:18', '2022-11-24 12:14:36');
+INSERT INTO `product` VALUES (3, '1234', 'bb', 'bbb', 100.00, NULL, 0, 1, NULL, 10, '1', NULL, NULL, 0, '2022-11-24 12:14:34', '2022-11-24 12:14:54');
 
 -- ----------------------------
 -- Table structure for shopping_cart
@@ -133,14 +171,14 @@ CREATE TABLE `shopping_cart`  (
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of shopping_cart
 -- ----------------------------
-INSERT INTO `shopping_cart` VALUES (1, 2, 2, '202200002', '吹风机2', 102.00, 12, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-18 17:54:58', '2022-11-18 17:56:34');
-INSERT INTO `shopping_cart` VALUES (2, 2, 2, '202200002', '吹风机2', 102.00, 17, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-19 09:49:12', '2022-11-19 09:50:59');
-INSERT INTO `shopping_cart` VALUES (3, 2, 2, '202200002', '吹风机2', 102.00, 12, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 1, '2022-11-19 09:51:04', '2022-11-19 09:51:04');
+INSERT INTO `shopping_cart` VALUES (1, 1, 11, '202200002', '吹风机2', 100.00, 10, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-18 17:54:58', '2022-11-22 17:59:19');
+INSERT INTO `shopping_cart` VALUES (2, 1, 12, '202200002', '吹风机2', 100.00, 10, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-19 09:49:12', '2022-11-22 17:59:19');
+INSERT INTO `shopping_cart` VALUES (3, 1, 13, '202200002', '吹风机2', 100.00, 10, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-19 09:51:04', '2022-11-22 17:59:19');
 
 -- ----------------------------
 -- Table structure for user
@@ -157,8 +195,9 @@ CREATE TABLE `user`  (
   `is_delete` int(0) DEFAULT 1 COMMENT '软删除 1 未删除 0 删除',
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `username`(`username`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
