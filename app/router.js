@@ -1,5 +1,6 @@
 'use strict';
 /**
+ * home 首页模块
  * utils 工具模块
  * user 用户模块
  * category 分类模块
@@ -10,14 +11,11 @@
  * shoppingCart 购物车模块
  * order 订单模块
  */
-const routerFileNames = [ 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order' ];
+const routerFileNames = [ 'home', 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order' ];
 /**
  * @param {Egg.Application} app - egg application
  */
 module.exports = app => {
-  const { router, controller } = app;
-  // 首页
-  router.get('/', controller.home.index);
   // 页面路由加载
   routerFileNames.forEach(fileName => {
     require(`./router/${fileName}`)(app);

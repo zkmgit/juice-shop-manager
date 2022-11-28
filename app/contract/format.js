@@ -24,6 +24,12 @@ module.exports = {
       },
     ] },
   },
+  LoginParams: {
+    param: { type: 'string', required: true, example: {
+      password: '密码',
+      username: '用户名',
+    } },
+  },
   UserQueryParams: {
     param: { type: 'string', required: true, example: {
       id: 'id',
