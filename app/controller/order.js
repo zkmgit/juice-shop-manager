@@ -92,11 +92,11 @@ class OrderController extends Controller {
     * @Request body AddOrderParams
     * @response 200 JsonBody 返回结果
   */
-  async insertOrder() {
+   async insertOrder() {
     const { ctx } = this;
     const params = ctx.request.body;
     // 字段校验
-    const validate = this.app.validator.validate({ cartInfoList: 'array', receiver: 'string', address: 'string', phone: 'string', remark: 'string' }, params);
+    const validate = this.app.validator.validate({ isPay: 'boolean', cartInfoList: 'array', receiver: 'string', address: 'string', phone: 'string', remark: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
@@ -131,6 +131,31 @@ class OrderController extends Controller {
       return pre + next.quantity
     }, 0)
 
+    // 记录订单的状态 1 待付款 2 待发货
+    let status = 1
+    // 订单生成的消息
+    let msg = ''
+
+    // 是否付款
+    if (isPay) {
+      // 判断用户余额是否大于等于总价格
+      const currentUserRes = await ctx.service.user.login({ id: user_id });
+
+      if (Number(currentUserRes.balance) >= Number(total_amount)) {
+        status = 2
+        msg = '订单已生成，付款成功.'
+        // 付款成功，修改用户余额
+        const balance = Number(currentUserRes.balance) - Number(total_amount)
+        await ctx.service.user.updateUser({ id: user_id, balance });
+      } else {
+        status = 1
+        msg = '订单已生成，付款失败 用户余额不足，待付款.'
+      }
+    } else {
+      status = 1
+      msg = '订单已生成，待付款.'
+    }
+
     // 生成订单组装参数
     const insertParams = {
       ...rest,
@@ -139,6 +164,7 @@ class OrderController extends Controller {
       cart_ids,
       total_amount,
       total_quantity,
+      status,
     }
 
     const result = await ctx.service.order.insertOrder(insertParams);
@@ -146,7 +172,7 @@ class OrderController extends Controller {
     if (!result) {
       ctx.body = {
         code: '-1',
-        msg: 'error',
+        msg: '订单生成失败.',
         result: {
           value: 0,
         },
@@ -162,7 +188,7 @@ class OrderController extends Controller {
 
     ctx.body = {
       code: '1',
-      msg: 'success',
+      msg,
       result: {
         value: result.res.affectedRows,
       },
