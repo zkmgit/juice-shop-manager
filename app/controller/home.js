@@ -15,12 +15,8 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
     /**
-     * 点击生成订单
-     * 1.支付
-     *  - 用户余额充足，支付成功 订单状态为待发货
-     *  - 用户余额不足，提示用户余额不足 订单状态为待支付
-     * 2.不支付
-     *  - 订单状态为待支付
+     * 发货按钮
+     * 快递列表
      */
     ctx.body = 'hi, egg';
   }
@@ -453,6 +449,60 @@ class HomeController extends Controller {
       code: '1',
       msg: 'success',
       result,
+    };
+  }
+  /**
+    * @summary 付款接口
+    * @description 付款 针对未付款的订单提供的接口
+    * @router post /wxApi/order/payment
+    * @Request body PaymentParams
+    * @response 200 JsonBody 返回结果
+  */
+   async payment() {
+    const { ctx } = this;
+    const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ user_id: 'string', order_id: 'string' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
+      return;
+    }
+
+    // 付款的消息
+    let msg = ''
+    
+    const currentUserRes = await ctx.service.user.login({ id: params.user_id });
+    const orderRes = await ctx.service.order.getOrderInfoById({ id: params.order_id });
+
+    if (orderRes.status === 1) {
+      // 未付款
+      if (Number(currentUserRes.balance) >= Number(orderRes.total_amount)) {
+        // 付款成功，修改用户余额 修改订单状态
+        const balance = Number(currentUserRes.balance) - Number(orderRes.total_amount)
+        await ctx.service.user.updateUser({ id: params.user_id, balance });
+        await ctx.service.order.updateOrder({ id: params.order_id, status: 2 });
+        msg = '付款成功.'
+      } else {
+        msg = '付款失败 用户余额不足.'
+      }
+    } else {
+      // 已付款
+      msg = '亲，该订单已付过款了.'
+    }
+
+    ctx.body = {
+      code: '1',
+      msg,
+      result: {
+        value: 1,
+      },
     };
   }
 }

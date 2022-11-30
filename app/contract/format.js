@@ -380,4 +380,11 @@ module.exports = {
       remark: '订单备注'
     } },
   },
+  // 付款
+  PaymentParams: {
+    param: { type: 'string', required: true, example: {
+      order_id: '订单id',
+      user_id: '用户id',
+    } },
+  },
 };
