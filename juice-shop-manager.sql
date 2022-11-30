@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 25/11/2022 15:57:44
+ Date: 30/11/2022 09:59:13
 */
 
 SET NAMES utf8mb4;
@@ -105,7 +105,7 @@ CREATE TABLE `order`  (
   `cart_ids` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '购物车ids',
   `total_amount` decimal(10, 2) DEFAULT NULL COMMENT '订单总金额',
   `total_quantity` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '订单产品总数量',
-  `status` int(0) DEFAULT 1 COMMENT '订单状态',
+  `status` int(0) DEFAULT 1 COMMENT '订单状态（1 待付款 2待发货 3待收货 4待评价）',
   `receiver` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '收货人',
   `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '详细收货地址',
   `phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '收货人电话',
@@ -146,6 +146,11 @@ CREATE TABLE `product`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `title`(`title`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of product
+-- ----------------------------
+INSERT INTO `product` VALUES (2, '202200000', '年衣童装女童卫衣秋冬2022新款男童长袖T恤儿童套头加绒上衣亲子', 'http://rkywhs3b8.hn-bkt.clouddn.com/a29aed3e184abaae050e56e6921d9c38.jpg', 159.00, 'http://rkywhs3b8.hn-bkt.clouddn.com/cdc1eea027af787847b8ab6ceaa16d98.jpg,http://rkywhs3b8.hn-bkt.clouddn.com/cc19b35af2ed0e5cc1cfe337701d4433.jpg,http://rkywhs3b8.hn-bkt.clouddn.com/65bc37aa539a5c8e80faf06331262e8d.jpg', 1, 3, '上装', 20, '2', '111', '品牌：年衣适用年龄：4岁 5岁 6岁 7岁 8岁 9岁 10岁 11岁 12岁 13岁 14岁\n面料：其他/other\n图案：卡通动漫适用性别：男女通用模特实拍：实拍有模特\n是否带帽子：否颜色分类：年衣红 燕颔蓝 金莺黄 淡绯货号：N4224063A06\n参考身高：90cm 100cm 110cm 120cm 130cm 140cm 150cm适用季节：冬季上市年份季节：2022年冬\n材质成分：其他材质100%', 1, '2022-11-22 18:30:13', '2022-11-22 18:30:13');
 
 -- ----------------------------
 -- Records of product
@@ -191,6 +196,7 @@ CREATE TABLE `user`  (
   `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '密码',
   `sex` int(0) DEFAULT 1 COMMENT '性别 1 男 0 女',
   `status` int(0) DEFAULT 1 COMMENT '状态 1 启用 0 禁用',
+  `balance` decimal(10, 2) DEFAULT 0.00 COMMENT '用户余额',
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '邮箱',
   `is_delete` int(0) DEFAULT 1 COMMENT '软删除 1 未删除 0 删除',
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -202,8 +208,8 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'kay', 'admin', '123456', 1, 1, '2821800369@qq.com', 1, '2022-10-31 12:22:09', '2022-10-31 12:24:43');
-INSERT INTO `user` VALUES (2, 'tinger.', 'ting111', '123456', 1, 1, NULL, 1, '2022-10-31 12:25:59', '2022-10-31 12:26:13');
-INSERT INTO `user` VALUES (3, 'test222', 'admintest', '123456', 1, 1, NULL, 1, '2022-11-04 15:57:52', '2022-11-04 15:58:53');
+INSERT INTO `user` VALUES (1, 'kay', 'admin', '123456', 1, 1, 0.00, '2821800369@qq.com', 1, '2022-10-31 12:22:09', '2022-10-31 12:24:43');
+INSERT INTO `user` VALUES (2, 'tinger.', 'ting111', '123456', 1, 1, 0.00, NULL, 1, '2022-10-31 12:25:59', '2022-10-31 12:26:13');
+INSERT INTO `user` VALUES (3, 'test222', 'admintest', '123456', 1, 1, 0.00, NULL, 1, '2022-11-04 15:57:52', '2022-11-04 15:58:53');
 
 SET FOREIGN_KEY_CHECKS = 1;
