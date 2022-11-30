@@ -2,6 +2,12 @@
 const Service = require('egg').Service;
 
 class CarouselImageService extends Service {
+  // 根据id获取轮播图信息
+  async getCarouselImageInfoById(params) {
+    const result = await this.app.mysql.get('carousel_image', params);
+
+    return result;
+  }
   // 获取所有的轮播图信息
   async getAllCarouselImageList(sql) {
     const result = await this.app.mysql.query(sql);

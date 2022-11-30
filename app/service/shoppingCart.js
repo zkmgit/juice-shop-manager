@@ -2,6 +2,12 @@
 const Service = require('egg').Service;
 
 class ShoppingCartService extends Service {
+  // 根据id获取购物车信息
+  async getShoppingCartInfoById(params) {
+    const result = await this.app.mysql.get('shopping_cart', params);
+
+    return result;
+  }
   // 获取所有的购物车信息
   async getAllShoppingCartList(sql) {
     const result = await this.app.mysql.query(sql);

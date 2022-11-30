@@ -2,6 +2,12 @@
 const Service = require('egg').Service;
 
 class ProductService extends Service {
+  // 根据id获取产品信息
+  async getProductInfoById(params) {
+    const result = await this.app.mysql.get('product', params);
+
+    return result;
+  }
   // 获取所有的产品信息
   async getAllProductList(sql) {
     const result = await this.app.mysql.query(sql);

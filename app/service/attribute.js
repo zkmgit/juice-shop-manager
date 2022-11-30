@@ -2,6 +2,12 @@
 const Service = require('egg').Service;
 
 class AttributeService extends Service {
+  // 根据id获取属性信息
+  async getAttributeInfoById(params) {
+    const result = await this.app.mysql.get('attribute', params);
+
+    return result;
+  }
   // 获取所有的属性信息
   async getAllAttributeList(sql) {
     const result = await this.app.mysql.query(sql);

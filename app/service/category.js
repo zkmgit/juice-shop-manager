@@ -2,6 +2,12 @@
 const Service = require('egg').Service;
 
 class CategoryService extends Service {
+  // 根据id获取分类信息
+  async getCategoryInfoById(params) {
+    const result = await this.app.mysql.get('category', params);
+
+    return result;
+  }
   // 获取所有的分类信息
   async getAllCategoryList(sql) {
     const result = await this.app.mysql.query(sql);
