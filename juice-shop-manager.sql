@@ -212,4 +212,21 @@ INSERT INTO `user` VALUES (1, 'kay', 'admin', '123456', 1, 1, 0.00, '2821800369@
 INSERT INTO `user` VALUES (2, 'tinger.', 'ting111', '123456', 1, 1, 0.00, NULL, 1, '2022-10-31 12:25:59', '2022-10-31 12:26:13');
 INSERT INTO `user` VALUES (3, 'test222', 'admintest', '123456', 1, 1, 0.00, NULL, 1, '2022-11-04 15:57:52', '2022-11-04 15:58:53');
 
+-- ----------------------------
+-- Table structure for logistics
+-- ----------------------------
+DROP TABLE IF EXISTS `logistics`;
+CREATE TABLE `logistics`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '物流id',
+  `tracking_number` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '快递单号',
+  `tracking_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '快递名称',
+  `order_id` int(0) DEFAULT NULL COMMENT '订单id',
+  `is_delete` int(0) DEFAULT 1 COMMENT '是否删除 1 未删除 0删除',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '物流描述',
+  `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `tracking_number`(`tracking_number`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
 SET FOREIGN_KEY_CHECKS = 1;
