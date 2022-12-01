@@ -387,4 +387,43 @@ module.exports = {
       user_id: '用户id',
     } },
   },
+  // 物流
+  LogisticsJsonBody: {
+    code: { type: 'string', required: true, example: '1' },
+    msg: { type: 'string', required: true, example: 'success' },
+    result: { type: 'string', required: true, example: [
+      {
+        id: '物流id',
+        tracking_number: "快递单号",
+        tracking_name: "快递名称",
+        order_id: '订单id',
+        order_number: '订单编号（J-当前日期8位数+10000递增）',
+        user_id: '用户id',
+        receiver: '收货人',
+        address: '详细收货地址',
+        phone: '收货人电话',
+        remark: '物流备注',
+        is_delete: "软删除",
+        create_time: "创建时间",
+        update_time: "修改时间",
+      },
+    ] },
+  },
+  LogisticsQueryParams: {
+    param: { type: 'string', required: true, example: {
+      id: '物流id',
+      tracking_number: '物流编号',
+      is_delete: '是否删除 未删除1 删除0',
+      pn: 'integer',
+      ps: 'integer',
+    } },
+  },
+  AddLogisticsParams: {
+    param: { type: 'string', required: true, example: {
+      tracking_number: '快递单号',
+      tracking_name: '快递名称',
+      order_id: '订单id',
+      remark: '订单备注'
+    } },
+  },
 };

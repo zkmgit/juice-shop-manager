@@ -15,8 +15,7 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
     /**
-     * 发货按钮
-     * 快递列表
+     * 
      */
     ctx.body = 'hi, egg';
   }

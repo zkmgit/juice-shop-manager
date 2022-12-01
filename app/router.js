@@ -10,8 +10,9 @@
  * product 产品模块
  * shoppingCart 购物车模块
  * order 订单模块
+ * logistics 物流模块
  */
-const routerFileNames = [ 'home', 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order' ];
+const routerFileNames = [ 'home', 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order', 'logistics' ];
 /**
  * @param {Egg.Application} app - egg application
  */
