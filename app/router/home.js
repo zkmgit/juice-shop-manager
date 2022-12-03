@@ -11,6 +11,10 @@ module.exports = app => {
   router.get('/wxApi/category/getAllCategoryList', controller.home.getAllCategoryList);
   // 产品
   router.post('/wxApi/product/getAllProductList', controller.home.getAllProductList);
+  // 根据分类id获取产品信息
+  router.get('/wxApi/product/getAllProductListByCategoryId/:id', controller.home.getAllProductListByCategoryId);
+  // 根据商品id获取商品详情
+  router.get('/wxApi/product/getProductInfoById/:id', controller.home.getProductInfoById);
   // 购物车
   router.get('/wxApi/shoppingCart/getAllShoppingCartList/:id', controller.home.getAllShoppingCartList);
   router.post('/wxApi/shoppingCart/insertAndSaveShoppingCart', controller.home.insertAndSaveShoppingCart);

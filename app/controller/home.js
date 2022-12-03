@@ -15,7 +15,11 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
     /**
-     * 
+     * vue
+     * -物流列表
+     * -订单列表 -发货按钮 - 增加编辑订单信息功能
+     * -各模块增加筛选项
+     * -小程序api 登录接口
      */
     ctx.body = 'hi, egg';
   }
@@ -135,6 +139,68 @@ class HomeController extends Controller {
     };
   }
   /**
+    * @summary 根据分类id获取商品
+    * @description 根据分类id获取商品
+    * @router get /wxApi/product/getAllProductListByCategoryId/:id
+    * @response 200 ProductJsonBody 返回结果
+  */
+   async getAllProductListByCategoryId() {
+    const { ctx } = this;
+    const params = ctx.params;
+    
+    // sql组装
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p'
+    const suffix = `limit 999 offset 0`
+    let buildSql = `Where is_delete = '1' AND status = '1' AND category_id = '${params.id}'`
+
+    // 组装sql语句
+    const sql = `${prefix} ${buildSql} ${suffix}`
+
+    const { result } = await ctx.service.product.getAllProductList(sql);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: [],
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result,
+    };
+  }
+  /**
+    * @summary 根据商品id获取商品详情
+    * @description 根据商品id获取商品详情
+    * @router get /wxApi/product/getProductInfoById/:id
+    * @response 200 ProductJsonBody 返回结果
+  */
+   async getProductInfoById() {
+    const { ctx } = this;
+    const params = ctx.params;
+
+    const { result } = await ctx.service.product.getProductInfoById({ id: params.id });
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {},
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result,
+    };
+  }
+  /**
     * @summary 产品列表分页查询
     * @description 产品列表分页查询 1. 首页商品展示入参 pn ps 2.分类页面 根据类目id获取商品入参 category_id pn ps
     * @router post /wxApi/product/getAllProductList
@@ -196,8 +262,7 @@ class HomeController extends Controller {
   /**
     * @summary 获取当前用户的购物车列表
     * @description 获取当前用户的购物车列表  入参 当前登录用户的id
-    * @router get /wxApi/shoppingCart/getAllShoppingCartList
-    * @request query integer *id 用户id
+    * @router get /wxApi/shoppingCart/getAllShoppingCartList/:id
     * @response 200 ShoppingCartJsonBody 返回结果
   */
    async getAllShoppingCartList() {
@@ -401,8 +466,7 @@ class HomeController extends Controller {
   /**
     * @summary 获取当前用户的订单接口
     * @description 获取当前用户的订单接口
-    * @router get /wxApi/order/getAllOrderList
-    * @request query integer *id 用户id
+    * @router get /wxApi/order/getAllOrderList/:id
     * @response 200 OrderJsonBody 返回结果
   */
    async getAllOrderList() {
