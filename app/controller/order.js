@@ -71,9 +71,17 @@ class OrderController extends Controller {
     })
 
     const cartInfos = await Promise.all(promiseList);
+
+    const statusMap = {
+      1: '待付款', 
+      2: '待发货', 
+      3: '待收货', 
+      4: '待评价'
+    }
     // 获取购物车信息
     result.forEach((item, index) => {
       item.cartInfo = cartInfos[index];
+      item.statusName = statusMap[item.status]
       item.createTime = formatDateTime(item.create_time),
       item.updateTime = formatDateTime(item.update_time)
     })
