@@ -16,7 +16,6 @@ class HomeController extends Controller {
     const { ctx } = this;
     /**
      * vue
-     * -物流列表
      * -订单列表 -发货按钮 - 增加编辑订单信息功能
      * -各模块增加筛选项
      * -小程序api 登录接口

@@ -63,7 +63,14 @@ class LogisticsController extends Controller {
     ctx.body = {
       code: '1',
       msg: 'success',
-      result,
+      result: result.map(item => {
+        return {
+          ...item,
+          isDelete: item.is_delete === 1 ? '未删除' : item.is_delete === 0 ? '已删除' : '',
+          createTime: formatDateTime(item.create_time),
+          updateTime: formatDateTime(item.update_time)
+        };
+      }),
       total,
     };
   }
