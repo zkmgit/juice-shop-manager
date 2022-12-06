@@ -15,7 +15,7 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
     /**
-     * -小程序api 登录接口
+     * -小程序api 登录接口 通过uni.login获取code 请求自己的开发者服务器，然后开发者服务器用appid+appsecret+code去请求微信接口api返回openid+session_key注册登录
      */
     ctx.body = 'hi, egg';
   }
