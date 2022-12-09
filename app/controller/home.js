@@ -16,6 +16,9 @@ class HomeController extends Controller {
     const { ctx } = this;
     /**
      * -小程序api 登录接口 通过uni.login获取code 请求自己的开发者服务器，然后开发者服务器用appid+appsecret+code去请求微信接口api返回openid+session_key注册登录
+     * https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
+     * wx9952fe6ac22b0492
+     * 9773eea0d75ce7f0cd56ed195a6efcba
      */
     ctx.body = 'hi, egg';
   }
@@ -74,9 +77,9 @@ class HomeController extends Controller {
     const { ctx } = this;
 
     // sql组装
-    const prefix = 'SELECT c.id,c.title,c.image,c.status,c.order_num,c.is_delete,c.create_time,c.update_time FROM carousel_image AS c'
-    const suffix = ` Where status = '1' ORDER BY order_num ASC limit 3 offset 0`
-    const sql = prefix + suffix
+    const prefix = 'SELECT c.id,c.title,c.image,c.status,c.order_num,c.is_delete,c.create_time,c.update_time FROM carousel_image AS c';
+    const suffix = ` Where status = '1' ORDER BY order_num ASC limit 3 offset 0`;
+    const sql = prefix + suffix;
 
     const { result } = await ctx.service.carouselImage.getAllCarouselImageList(sql);
 
@@ -96,7 +99,7 @@ class HomeController extends Controller {
         return {
           label: item.title,
           value: item.image,
-          id: item.id
+          id: item.id,
         };
       }),
     };
@@ -145,12 +148,12 @@ class HomeController extends Controller {
     const params = ctx.params;
     
     // sql组装
-    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p'
-    const suffix = `limit 999 offset 0`
-    let buildSql = `Where is_delete = '1' AND status = '1' AND category_id = '${params.id}'`
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
+    const suffix = `limit 999 offset 0`;
+    let buildSql = `Where is_delete = '1' AND status = '1' AND category_id = '${params.id}'`;
 
     // 组装sql语句
-    const sql = `${prefix} ${buildSql} ${suffix}`
+    const sql = `${prefix} ${buildSql} ${suffix}`;
 
     const { result } = await ctx.service.product.getAllProductList(sql);
 
@@ -222,9 +225,9 @@ class HomeController extends Controller {
     }
     
     // sql组装
-    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p'
-    const suffix = `limit ${params.ps} offset ${(params.pn - 1) * params.ps}`
-    let buildSql = `Where is_delete = '1' AND status = '1'`
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
+    const suffix = `limit ${params.ps} offset ${(params.pn - 1) * params.ps}`;
+    let buildSql = `Where is_delete = '1' AND status = '1'`;
     
     Object.keys(params).filter(key => !['ps', 'pn'].includes(key)).forEach(key => {
       if (['id', 'spu', 'category_id'].includes(key)) {
@@ -236,7 +239,7 @@ class HomeController extends Controller {
     })
 
     // 组装sql语句
-    const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
+    const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`;
 
     const { result } = await ctx.service.product.getAllProductList(sql);
 

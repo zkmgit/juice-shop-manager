@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 30/11/2022 09:59:13
+ Date: 09/12/2022 10:05:02
 */
 
 SET NAMES utf8mb4;
@@ -95,6 +95,28 @@ INSERT INTO `category` VALUES (11, '袜子', 'https://wpimg.wallstcn.com/f778738
 INSERT INTO `category` VALUES (12, '鞋', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 1, NULL, 1, '2022-11-01 16:43:42', '2022-11-19 14:27:43');
 
 -- ----------------------------
+-- Table structure for logistics
+-- ----------------------------
+DROP TABLE IF EXISTS `logistics`;
+CREATE TABLE `logistics`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '物流id',
+  `tracking_number` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '快递单号',
+  `tracking_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '快递名称',
+  `order_id` int(0) DEFAULT NULL COMMENT '订单id',
+  `is_delete` int(0) DEFAULT 1 COMMENT '是否删除 1 未删除 0删除',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '物流描述',
+  `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `tracking_number`(`tracking_number`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of logistics
+-- ----------------------------
+INSERT INTO `logistics` VALUES (1, 'KD-2022120510000', 'Juice快递', 2, 1, '把数据发件方了解到司法局按间里#￥#432432434', '2022-12-05 16:31:19', '2022-12-05 16:31:19');
+
+-- ----------------------------
 -- Table structure for order
 -- ----------------------------
 DROP TABLE IF EXISTS `order`;
@@ -120,7 +142,7 @@ CREATE TABLE `order`  (
 -- ----------------------------
 -- Records of order
 -- ----------------------------
-INSERT INTO `order` VALUES (2, 'J-2022112210000', 1, '3,2,1', 3000.00, '30', 1, 'kay.', '深圳龙岗坂田', '123456789', 1, '这是一个测试订单', '2022-11-22 17:59:19', '2022-11-22 17:59:19');
+INSERT INTO `order` VALUES (2, 'J-2022112210000', 1, '3,2,1', 3000.00, '30', 3, 'kay.', '深圳龙岗坂田', '123456789', 1, '这是一个测试订单', '2022-11-22 17:59:19', '2022-12-05 16:31:19');
 
 -- ----------------------------
 -- Table structure for product
@@ -145,18 +167,14 @@ CREATE TABLE `product`  (
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `title`(`title`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product
 -- ----------------------------
-INSERT INTO `product` VALUES (2, '202200000', '年衣童装女童卫衣秋冬2022新款男童长袖T恤儿童套头加绒上衣亲子', 'http://rkywhs3b8.hn-bkt.clouddn.com/a29aed3e184abaae050e56e6921d9c38.jpg', 159.00, 'http://rkywhs3b8.hn-bkt.clouddn.com/cdc1eea027af787847b8ab6ceaa16d98.jpg,http://rkywhs3b8.hn-bkt.clouddn.com/cc19b35af2ed0e5cc1cfe337701d4433.jpg,http://rkywhs3b8.hn-bkt.clouddn.com/65bc37aa539a5c8e80faf06331262e8d.jpg', 1, 3, '上装', 20, '2', '111', '品牌：年衣适用年龄：4岁 5岁 6岁 7岁 8岁 9岁 10岁 11岁 12岁 13岁 14岁\n面料：其他/other\n图案：卡通动漫适用性别：男女通用模特实拍：实拍有模特\n是否带帽子：否颜色分类：年衣红 燕颔蓝 金莺黄 淡绯货号：N4224063A06\n参考身高：90cm 100cm 110cm 120cm 130cm 140cm 150cm适用季节：冬季上市年份季节：2022年冬\n材质成分：其他材质100%', 1, '2022-11-22 18:30:13', '2022-11-22 18:30:13');
-
--- ----------------------------
--- Records of product
--- ----------------------------
-INSERT INTO `product` VALUES (2, '123', 'aa', 'aaa', 10.00, NULL, 1, 1, NULL, 10, '1', NULL, NULL, 1, '2022-11-24 12:14:18', '2022-11-24 12:14:36');
-INSERT INTO `product` VALUES (3, '1234', 'bb', 'bbb', 100.00, NULL, 0, 1, NULL, 10, '1', NULL, NULL, 0, '2022-11-24 12:14:34', '2022-11-24 12:14:54');
+INSERT INTO `product` VALUES (2, '123', 'aa', 'aaa', 10.00, NULL, 1, 3, NULL, 10, '1', NULL, NULL, 1, '2022-11-24 12:14:18', '2022-11-30 10:54:52');
+INSERT INTO `product` VALUES (3, '1234', 'bb', 'bbb', 100.00, NULL, 0, 4, NULL, 10, '1', NULL, NULL, 0, '2022-11-24 12:14:34', '2022-11-30 10:54:58');
+INSERT INTO `product` VALUES (4, '202200000', '年衣童装女童卫衣秋冬2022新款男童长袖T恤儿童套头加绒上衣亲子', 'http://rkywhs3b8.hn-bkt.clouddn.com/a29aed3e184abaae050e56e6921d9c38.jpg', 159.00, 'http://rkywhs3b8.hn-bkt.clouddn.com/cdc1eea027af787847b8ab6ceaa16d98.jpg,http://rkywhs3b8.hn-bkt.clouddn.com/cc19b35af2ed0e5cc1cfe337701d4433.jpg,http://rkywhs3b8.hn-bkt.clouddn.com/65bc37aa539a5c8e80faf06331262e8d.jpg', 1, 3, '上装', 20, '2', '111', '品牌：年衣适用年龄：4岁 5岁 6岁 7岁 8岁 9岁 10岁 11岁 12岁 13岁 14岁\n面料：其他/other\n图案：卡通动漫适用性别：男女通用模特实拍：实拍有模特\n是否带帽子：否颜色分类：年衣红 燕颔蓝 金莺黄 淡绯货号：N4224063A06\n参考身高：90cm 100cm 110cm 120cm 130cm 140cm 150cm适用季节：冬季上市年份季节：2022年冬\n材质成分：其他材质100%', 1, '2022-11-22 18:30:13', '2022-11-22 18:30:13');
 
 -- ----------------------------
 -- Table structure for shopping_cart
@@ -181,9 +199,9 @@ CREATE TABLE `shopping_cart`  (
 -- ----------------------------
 -- Records of shopping_cart
 -- ----------------------------
-INSERT INTO `shopping_cart` VALUES (1, 1, 11, '202200002', '吹风机2', 100.00, 10, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-18 17:54:58', '2022-11-22 17:59:19');
-INSERT INTO `shopping_cart` VALUES (2, 1, 12, '202200002', '吹风机2', 100.00, 10, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-19 09:49:12', '2022-11-22 17:59:19');
-INSERT INTO `shopping_cart` VALUES (3, 1, 13, '202200002', '吹风机2', 100.00, 10, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-19 09:51:04', '2022-11-22 17:59:19');
+INSERT INTO `shopping_cart` VALUES (1, 1, 11, '202200002', '吹风机2', 100.00, 10, '蓝色-xl-1', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-18 17:54:58', '2022-12-05 18:25:06');
+INSERT INTO `shopping_cart` VALUES (2, 1, 12, '202200002', '吹风机23', 100.00, 10, '蓝色-xl-2', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-19 09:49:12', '2022-12-05 18:24:50');
+INSERT INTO `shopping_cart` VALUES (3, 1, 13, '202200002', '吹风机24', 100.00, 10, '蓝色-xl-3', 'http://localhost:7001/swagger-ui.html#/', 0, '2022-11-19 09:51:04', '2022-12-05 18:25:09');
 
 -- ----------------------------
 -- Table structure for user
@@ -213,32 +231,20 @@ INSERT INTO `user` VALUES (2, 'tinger.', 'ting111', '123456', 1, 1, 0.00, NULL, 
 INSERT INTO `user` VALUES (3, 'test222', 'admintest', '123456', 1, 1, 0.00, NULL, 1, '2022-11-04 15:57:52', '2022-11-04 15:58:53');
 
 -- ----------------------------
--- Table structure for logistics
--- ----------------------------
-DROP TABLE IF EXISTS `logistics`;
-CREATE TABLE `logistics`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '物流id',
-  `tracking_number` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '快递单号',
-  `tracking_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '快递名称',
-  `order_id` int(0) DEFAULT NULL COMMENT '订单id',
-  `is_delete` int(0) DEFAULT 1 COMMENT '是否删除 1 未删除 0删除',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '物流描述',
-  `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `tracking_number`(`tracking_number`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
 -- Table structure for wx-user
 -- ----------------------------
 DROP TABLE IF EXISTS `wx-user`;
 CREATE TABLE `wx-user`  (
   `id` int(0) NOT NULL COMMENT 'id',
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '微信code',
+  `open_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户唯一标识',
+  `session_key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '会话密钥',
+  `unionid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户在开放平台的唯一标识符',
   `nick-name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '昵称',
   `addr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '微信默认地址',
   `avatar-url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '微信头像',
+  `balance` decimal(10, 2) DEFAULT 0.00 COMMENT '余额',
+  `status` int(0) DEFAULT 1 COMMENT '微信用户状态 1启用 0禁用',
+  `is_delete` int(0) DEFAULT 1 COMMENT '是否删除  1 0',
   `create_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
