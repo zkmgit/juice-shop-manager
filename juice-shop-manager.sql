@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 09/12/2022 10:05:02
+ Date: 10/12/2022 18:17:14
 */
 
 SET NAMES utf8mb4;
@@ -231,17 +231,16 @@ INSERT INTO `user` VALUES (2, 'tinger.', 'ting111', '123456', 1, 1, 0.00, NULL, 
 INSERT INTO `user` VALUES (3, 'test222', 'admintest', '123456', 1, 1, 0.00, NULL, 1, '2022-11-04 15:57:52', '2022-11-04 15:58:53');
 
 -- ----------------------------
--- Table structure for wx-user
+-- Table structure for wx_user
 -- ----------------------------
-DROP TABLE IF EXISTS `wx-user`;
-CREATE TABLE `wx-user`  (
+DROP TABLE IF EXISTS `wx_user`;
+CREATE TABLE `wx_user`  (
   `id` int(0) NOT NULL COMMENT 'id',
   `open_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户唯一标识',
   `session_key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '会话密钥',
-  `unionid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户在开放平台的唯一标识符',
-  `nick-name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '昵称',
+  `nick_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '昵称',
   `addr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '微信默认地址',
-  `avatar-url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '微信头像',
+  `avatar_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '微信头像',
   `balance` decimal(10, 2) DEFAULT 0.00 COMMENT '余额',
   `status` int(0) DEFAULT 1 COMMENT '微信用户状态 1启用 0禁用',
   `is_delete` int(0) DEFAULT 1 COMMENT '是否删除  1 0',
