@@ -2,6 +2,7 @@
 
 const Controller = require('egg').Controller;
 const { formatDateTime } = require('../extend/helper');
+let https = require("https");
 /**
 * @controller Juice小程序接口文档
 */
@@ -14,13 +15,8 @@ class HomeController extends Controller {
     */
   async index() {
     const { ctx } = this;
-    /**
-     * -小程序api 登录接口 通过uni.login获取code 请求自己的开发者服务器，然后开发者服务器用appid+appsecret+code去请求微信接口api返回openid+session_key注册登录
-     * https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
-     * wx9952fe6ac22b0492
-     * 9773eea0d75ce7f0cd56ed195a6efcba
-     */
-    ctx.body = 'hi, egg';
+    // todo 是否token过期接口
+    ctx.body = 'hi egg';
   }
   /**
     * @summary 用户登录接口

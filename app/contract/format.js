@@ -426,4 +426,34 @@ module.exports = {
       remark: '订单备注'
     } },
   },
+  // 小程序用户
+  WxUserJsonBody: {
+    code: { type: 'string', required: true, example: '1' },
+    msg: { type: 'string', required: true, example: 'success' },
+    result: { type: 'string', required: true, example: [
+      {
+        id: 'integer',
+        open_id: '用户唯一标识',
+        session_key: '会话密钥',
+        nick_name: '昵称',
+        addr: '微信默认地址',
+        avatar_url: '微信头像',
+        balance: '余额',
+        status: '微信用户状态',
+        is_delete: '是否删除',
+        create_time: '创建时间',
+        update_time: '修改时间',
+      },
+    ] },
+  },
+  WxUserQueryParams: {
+    param: { type: 'string', required: true, example: {
+      id: 'id',
+      is_delete: '是否删除 未删除1 删除0',
+      status: '状态',
+      nick_name: '昵称',
+      pn: 'integer',
+      ps: 'integer',
+    } },
+  },
 };

@@ -3,6 +3,7 @@
  * home 首页模块
  * utils 工具模块
  * user 用户模块
+ * wxUser 小程序用户模块
  * category 分类模块
  * attribute 属性模块
  * carouselImage 轮播图模块
@@ -12,7 +13,7 @@
  * order 订单模块
  * logistics 物流模块
  */
-const routerFileNames = [ 'home', 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order', 'logistics' ];
+const routerFileNames = [ 'home', 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order', 'logistics', 'wxUser' ];
 /**
  * @param {Egg.Application} app - egg application
  */
