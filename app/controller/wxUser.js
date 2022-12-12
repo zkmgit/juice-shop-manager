@@ -30,7 +30,13 @@ class WxUserController extends Controller {
     
     if (!result) {
       // 若未注册，则 插入一条数据并将用户信息和token一起
-      const res = await ctx.service.wxUser.insertWxUser(params);
+      const res = await ctx.service.wxUser.insertWxUser({
+        open_id: params.openid,
+        session_key: params.session_key,
+        nick_name: params.nickName,
+        addr: params.addr,
+        avatar_url: params.avatarUrl,
+      });
 
       if (!res) {
         ctx.body = {
