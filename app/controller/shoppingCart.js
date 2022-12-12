@@ -105,16 +105,6 @@ class ShoppingCartController extends Controller {
       };
       return;
     }
-    // 获取购物车是否有重复的数据
-    const options = {
-      where: {
-        user_id: params.user_id,
-        product_id: params.product_id,
-        is_delete: 1
-      }, // WHERE 条件
-      limit: 10, // 返回数据量
-      offset: 0, // 数据偏移量
-    };
 
     // sql组装
     const prefix = 'SELECT s.id,s.user_id,s.product_id,s.spu,s.title,s.price,s.quantity,s.specifications,s.product_image,s.is_delete,s.create_time,s.update_time FROM `shopping_cart` AS s'

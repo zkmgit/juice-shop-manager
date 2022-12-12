@@ -147,14 +147,14 @@ class OrderController extends Controller {
     // 是否付款
     if (isPay) {
       // 判断用户余额是否大于等于总价格
-      const currentUserRes = await ctx.service.user.login({ id: user_id });
+      const currentUserRes = await ctx.service.wxUser.getWxUserInfoById({ id: user_id });
 
       if (Number(currentUserRes.balance) >= Number(total_amount)) {
         status = 2
         msg = '订单已生成，付款成功.'
         // 付款成功，修改用户余额
         const balance = Number(currentUserRes.balance) - Number(total_amount)
-        await ctx.service.user.updateUser({ id: user_id, balance });
+        await ctx.service.wxUser.updateWxUser({ id: user_id, balance });
       } else {
         status = 1
         msg = '订单已生成，付款失败 用户余额不足，待付款.'

@@ -88,11 +88,11 @@ class SystemController extends Controller {
     const { ctx } = this;
 
     // sql组装
-    const prefix = 'SELECT u.id,u.name,u.username,u.password,u.sex,u.status,u.email,u.is_delete,u.create_time,u.update_time FROM user AS u';
+    const prefix = 'SELECT u.id,u.open_id,u.session_key,u.nick_name,u.addr,u.status,u.avatar_url,u.balance,u.is_delete,u.create_time,u.update_time FROM wx_user AS u';
     const suffix = ` Where status = '1' limit 999 offset 0`;
     const sql = prefix + suffix
 
-    const { result } = await ctx.service.user.getAllUserList(sql);
+    const { result } = await ctx.service.wxUser.getAllWxUserList(sql);
 
     if (!result) {
       ctx.body = {
@@ -108,7 +108,7 @@ class SystemController extends Controller {
       msg: 'success',
       result: result.map(item => {
         return {
-          label: item.name,
+          label: item.nick_name,
           value: item.id
         };
       }),

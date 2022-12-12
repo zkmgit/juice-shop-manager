@@ -15,7 +15,7 @@ class HomeController extends Controller {
     */
   async index() {
     const { ctx } = this;
-    // todo 是否token过期接口
+    
     ctx.body = 'hi egg';
   }
   /**
@@ -105,7 +105,7 @@ class HomeController extends Controller {
           code: '1',
           msg: 'token existence',
           result: {
-            value: true
+            value: true,
           },
         };
       } else {
@@ -114,7 +114,7 @@ class HomeController extends Controller {
           code: '-1',
           msg: 'token expired',
           result: {
-            value: false
+            value: false,
           },
         };
       }
@@ -124,7 +124,7 @@ class HomeController extends Controller {
         code: '-1',
         msg: 'token expired',
         result: {
-          value: false
+          value: false,
         },
       };
     }
@@ -263,7 +263,7 @@ class HomeController extends Controller {
   }
   /**
     * @summary 产品列表分页查询
-    * @description 产品列表分页查询 1. 首页商品展示入参 pn ps 2.分类页面 根据类目id获取商品入参 category_id pn ps
+    * @description 产品列表分页查询  首页商品展示入参 pn ps
     * @router post /wxApi/product/getAllProductList
     * @request body ProductQueryParams
     * @response 200 ProductJsonBody 返回结果
@@ -469,14 +469,14 @@ class HomeController extends Controller {
     // 是否付款
     if (isPay) {
       // 判断用户余额是否大于等于总价格
-      const currentUserRes = await ctx.service.user.login({ id: user_id });
+      const currentUserRes = await ctx.service.wxUser.getWxUserInfoById({ id: user_id });
 
       if (Number(currentUserRes.balance) >= Number(total_amount)) {
         status = 2
         msg = '订单已生成，付款成功.'
         // 付款成功，修改用户余额
         const balance = Number(currentUserRes.balance) - Number(total_amount)
-        await ctx.service.user.updateUser({ id: user_id, balance });
+        await ctx.service.wxUser.updateUser({ id: user_id, balance });
       } else {
         status = 1
         msg = '订单已生成，付款失败 用户余额不足，待付款.'
@@ -553,10 +553,10 @@ class HomeController extends Controller {
 
     const promiseList = result.map(item => {
       // sql组装
-      const cart_prefix = 'SELECT s.id,s.user_id,s.product_id,s.spu,s.title,s.price,s.quantity,s.specifications,s.product_image,s.is_delete,s.create_time,s.update_time FROM `shopping_cart` AS s'
-      const cart_suffix = ` Where id in (${item.cart_ids}) limit 999 offset 0`
+      const cart_prefix = 'SELECT s.id,s.user_id,s.product_id,s.spu,s.title,s.price,s.quantity,s.specifications,s.product_image,s.is_delete,s.create_time,s.update_time FROM `shopping_cart` AS s';
+      const cart_suffix = ` Where id in (${item.cart_ids}) limit 999 offset 0`;
 
-      const cart_sql = `${cart_prefix}${cart_suffix}`
+      const cart_sql = `${cart_prefix}${cart_suffix}`;
 
       return ctx.service.shoppingCart.getAllShoppingCartList(cart_sql);
     })
@@ -565,8 +565,8 @@ class HomeController extends Controller {
     // 获取购物车信息
     result.forEach((item, index) => {
       item.cartInfo = cartInfos[index];
-      item.createTime = formatDateTime(item.create_time),
-      item.updateTime = formatDateTime(item.update_time)
+      item.createTime = formatDateTime(item.create_time);
+      item.updateTime = formatDateTime(item.update_time);
     })
 
     ctx.body = {
@@ -602,23 +602,23 @@ class HomeController extends Controller {
     // 付款的消息
     let msg = ''
     
-    const currentUserRes = await ctx.service.user.login({ id: params.user_id });
+    const currentUserRes = await ctx.service.wxUser.getWxUserInfoById({ id: params.user_id });
     const orderRes = await ctx.service.order.getOrderInfoById({ id: params.order_id });
 
     if (orderRes.status === 1) {
       // 未付款
       if (Number(currentUserRes.balance) >= Number(orderRes.total_amount)) {
         // 付款成功，修改用户余额 修改订单状态
-        const balance = Number(currentUserRes.balance) - Number(orderRes.total_amount)
-        await ctx.service.user.updateUser({ id: params.user_id, balance });
+        const balance = Number(currentUserRes.balance) - Number(orderRes.total_amount);
+        await ctx.service.wxUser.updateWxUser({ id: params.user_id, balance });
         await ctx.service.order.updateOrder({ id: params.order_id, status: 2 });
-        msg = '付款成功.'
+        msg = '付款成功.';
       } else {
-        msg = '付款失败 用户余额不足.'
+        msg = '付款失败 用户余额不足.';
       }
     } else {
       // 已付款
-      msg = '亲，该订单已付过款了.'
+      msg = '亲，该订单已付过款了.';
     }
 
     ctx.body = {
