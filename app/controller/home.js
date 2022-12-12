@@ -19,17 +19,17 @@ class HomeController extends Controller {
     ctx.body = 'hi egg';
   }
   /**
-    * @summary 用户登录接口
-    * @description 用户登录接口
+    * @summary 小程序登录接口
+    * @description 小程序登录接口
     * @router post /wxApi/user/login
-    * @request body LoginParams
+    * @request body WxLoginParams
     * @response 200 UserJsonBody 返回结果
   */
   async login() {
     const { ctx } = this;
     const params = ctx.request.body;
     // 字段校验
-    const validate = this.app.validator.validate({ username: 'string', password: 'string' }, params);
+    const validate = this.app.validator.validate({ openid: 'string', session_key: 'string', nickName: 'string', addr: 'string', avatarUrl: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
@@ -42,26 +42,92 @@ class HomeController extends Controller {
       return;
     }
 
-    const res = await ctx.service.user.login(params);
-
-    if (!res) {
-      ctx.body = {
-        code: '-1',
-        msg: 'error',
-        result: {},
-      };
-      return;
-    }
+    const result = await ctx.service.wxUser.getWxUserInfoById({ open_id: params.openid, session_key: params.session_key });
 
     // 登录成功生成token
     const token = this.app.jwt.sign(params, this.app.config.jwt.secret, { expiresIn: '2h' });
+    
+    if (!result) {
+      // 若未注册，则 插入一条数据并将用户信息和token一起
+      const res = await ctx.service.wxUser.insertWxUser({
+        open_id: params.openid,
+        session_key: params.session_key,
+        nick_name: params.nickName,
+        addr: params.addr,
+        avatar_url: params.avatarUrl,
+      });
 
-    ctx.body = {
-      code: '1',
-      msg: 'success',
-      result: res,
-      token,
-    };
+      if (!res) {
+        ctx.body = {
+          code: '-1',
+          msg: '授权失败.',
+          result: {
+            value: 0,
+          },
+        };
+        return;
+      }
+
+      const newUser = await ctx.service.wxUser.getWxUserInfoById({ open_id: params.openid, session_key: params.session_key });
+  
+      ctx.body = {
+        code: '1',
+        msg: 'success',
+        result: newUser,
+        token,
+      };
+    } else {
+      // 若已注册了，则生成token，将已注册的用户信息返回
+      ctx.body = {
+        code: '1',
+        msg: 'success',
+        result,
+        token,
+      };
+    }
+  }
+  /**
+    * @summary token是否已经过期接口
+    * @description token是否已经过期接口
+    * @router post /wxApi/user/getToken
+    * @request body getTokenParams
+    * @response 200 JsonBody 返回结果
+  */
+  async getToken() {
+    const { ctx } = this;
+    const params = ctx.request.body;
+
+    try {
+      const decoded = ctx.app.jwt.verify(params.token, ctx.app.config.jwt.secret);// 解密token
+
+      if (decoded) {
+        ctx.body = {
+          code: '1',
+          msg: 'token existence',
+          result: {
+            value: true
+          },
+        };
+      } else {
+        // token 过期
+        ctx.body = {
+          code: '-1',
+          msg: 'token expired',
+          result: {
+            value: false
+          },
+        };
+      }
+    } catch (e) {
+      // token 过期
+      ctx.body = {
+        code: '-1',
+        msg: 'token expired',
+        result: {
+          value: false
+        },
+      };
+    }
   }
   /**
     * @summary 首页轮播图接口

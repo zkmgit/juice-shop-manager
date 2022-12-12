@@ -5,6 +5,7 @@ module.exports = app => {
   router.get('/', controller.home.index);
   // 登录接口
   router.post('/wxApi/user/login', controller.home.login);
+  router.post('/wxApi/user/getToken', controller.home.getToken);
   // 轮播图
   router.get('/wxApi/system/carouselImageList', controller.home.carouselImageList);
   // 类目

@@ -456,4 +456,18 @@ module.exports = {
       ps: 'integer',
     } },
   },
+  WxLoginParams: {
+    param: { type: 'string', required: true, example: {
+      openid: 'openid',
+      session_key: 'session_key',
+      nickName: '昵称',
+      addr: '详细地址',
+      avatarUrl: '头像url',
+    } },
+  },
+  getTokenParams: {
+    param: { type: 'string', required: true, example: {
+      token: 'token',
+    } },
+  }
 };
