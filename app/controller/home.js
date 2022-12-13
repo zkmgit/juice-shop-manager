@@ -2,7 +2,6 @@
 
 const Controller = require('egg').Controller;
 const { formatDateTime } = require('../extend/helper');
-let https = require("https");
 /**
 * @controller Juice小程序接口文档
 */
@@ -15,7 +14,13 @@ class HomeController extends Controller {
     */
   async index() {
     const { ctx } = this;
-    
+    /**
+     * 1.生成订单，对应产品库存减少，购买人数量加1
+     * 生成订单，库存逻辑优化
+     * - 加入购物车的时候校验库存是否足够，若商品库存小于用户的购物车数量时，则提示库存不足
+     * - 生成订单的时候，校验一遍商品的库存是否充足，不足则提示xx商品库存不足，请调整购物车
+     * 2 .商品 展示 原价，现价
+     */
     ctx.body = 'hi egg';
   }
   /**
