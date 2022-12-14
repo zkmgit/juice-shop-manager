@@ -18,10 +18,7 @@ class HomeController extends Controller {
      * 1.生成订单逻辑
      * - 生成订单的时候，校验一遍商品的库存是否充足，不足则提示xx商品库存不足，请调整购物车
      * - 对应产品库存减少，购买人数量加1
-     * 2.购物车逻辑
-     * - 加入购物车 跟 删除购物车
-     * - 需提供一个删除购物车的接口
-     * 3 .商品缺少字段
+     * 2.商品缺少字段
      * - 原价，现价
      */
     ctx.body = 'hi egg';
@@ -372,9 +369,8 @@ class HomeController extends Controller {
    async insertAndSaveShoppingCart() {
     const { ctx } = this;
     const params = ctx.request.body;
-    // 字段校验
     /**
-     * type add, del  根据类型去编辑购物车数量
+     * type [add, del]  根据类型去编辑购物车数量
      * 根据是否有id，判断是否是新数据
      * 1.有id
      * - type == add ，往购物车追加数量+1
@@ -383,7 +379,9 @@ class HomeController extends Controller {
      *   - 当购物车的商品数量只有1的时候，直接删除购物车
      * 2.无id
      * - 只有新增的情况，新增一条购物车数据，数量直接为1
-     */
+    */
+
+    // 字段校验
     const validate = this.app.validator.validate({ id: 'string?', user_id: 'string', product_id: 'string', spu: 'string', price: 'string', title: 'string', quantity: 'string', specifications: 'string', product_image: 'string', type: 'string' }, params);
 
     if (validate) {
@@ -397,19 +395,25 @@ class HomeController extends Controller {
       return;
     }
 
-    // sql组装
-    const prefix = 'SELECT s.id,s.user_id,s.product_id,s.spu,s.title,s.price,s.quantity,s.specifications,s.product_image,s.is_delete,s.create_time,s.update_time FROM `shopping_cart` AS s'
-    const suffix = `Where user_id = '${params.user_id}' AND product_id = '${params.product_id}' AND is_delete = '1' limit 10 offset 0`
-
-    const sql = `${prefix} ${suffix}`
-
-    const res = await ctx.service.shoppingCart.getAllShoppingCartList(sql);
-
     let result = null;
-    //  检测是否已经加入当前用户的购物车，有则直接加该产品的数量
-    if (res.result.length > 0) {
-      const { id, quantity } = res.result[0]
-      result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity + 1 });
+
+    if (Reflect.has(params, 'id')) {
+      const cartInfo = await ctx.service.shoppingCart.getShoppingCartInfoById({ id: params.id });
+      // 根据type增加或者减少购物车的商品数量
+      const { id, quantity } = cartInfo
+
+      if (params.type === 'add') {
+        // 当购物车的商品数量直接 +1
+          result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity + 1 });
+      } else {
+        if (+quantity === 1) {
+          // 当购物车的商品数量只有1时，则直接删除购物车
+          result = await ctx.service.shoppingCart.updateShoppingCart({ id, is_delete: 0 });
+        } else {
+          // 当购物车的商品数量大于1时，则直接购物车的商品数量 -1
+          result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity - 1 });
+        }
+      }
     } else {
       result = await ctx.service.shoppingCart.insertShoppingCart(params);
     }
@@ -431,6 +435,43 @@ class HomeController extends Controller {
       msg: 'success',
       result: {
         value: result.res.affectedRows,
+      },
+    };
+  }
+   /**
+    * @summary 批量删除购物车接口
+    * @description 批量删除购物车接口 多个id用,隔开  1,2,3
+    * @router delete /wxApi/shoppingCart/batchDelShoppingCart/:ids
+    * @Request query integer *ids 购物车ids
+    * @response 200 JsonBody 返回结果
+  */
+  async batchDelShoppingCart() {
+    const { ctx } = this;
+    const params = ctx.params;
+
+    const ids = params.ids.split(',')
+
+    ids.forEach(async id => {
+      await ctx.service.shoppingCart.updateShoppingCart({ id, is_delete: 0 });
+    })
+
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {
+          value: 0,
+        },
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: {
+        value: ids.length,
       },
     };
   }

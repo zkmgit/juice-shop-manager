@@ -328,6 +328,7 @@ module.exports = {
       quantity: '产品数量',
       specifications: "产品规格",
       product_image: "产品主图",
+      type: "根据类型区分购物车的商品数量是否增加或者减少",
     } },
   },
   // 订单
