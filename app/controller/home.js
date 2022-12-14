@@ -15,11 +15,14 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
     /**
-     * 1.生成订单，对应产品库存减少，购买人数量加1
-     * 生成订单，库存逻辑优化
-     * - 加入购物车的时候校验库存是否足够，若商品库存小于用户的购物车数量时，则提示库存不足
+     * 1.生成订单逻辑
      * - 生成订单的时候，校验一遍商品的库存是否充足，不足则提示xx商品库存不足，请调整购物车
-     * 2 .商品 展示 原价，现价
+     * - 对应产品库存减少，购买人数量加1
+     * 2.购物车逻辑
+     * - 加入购物车 跟 删除购物车
+     * - 需提供一个删除购物车的接口
+     * 3 .商品缺少字段
+     * - 原价，现价
      */
     ctx.body = 'hi egg';
   }
@@ -360,8 +363,8 @@ class HomeController extends Controller {
     };
   }
   /**
-    * @summary 加入购物车接口
-    * @description 加入购物车功能按钮接口，若该商品未加入购物车，则生成新的购物车数据，若已加入购物车，则在该数据上的数量加1
+    * @summary 编辑购物车数量接口
+    * @description 编辑购物车数量接口 根据type区分商品数量+1还是-1
     * @router post /wxApi/shoppingCart/insertAndSaveShoppingCart
     * @request body AddShoppingCartParams
     * @response 200 JsonBody 返回结果
@@ -370,7 +373,18 @@ class HomeController extends Controller {
     const { ctx } = this;
     const params = ctx.request.body;
     // 字段校验
-    const validate = this.app.validator.validate({ id: 'string?', user_id: 'string', product_id: 'string', spu: 'string', price: 'string', title: 'string', quantity: 'string', specifications: 'string', product_image: 'string' }, params);
+    /**
+     * type add, del  根据类型去编辑购物车数量
+     * 根据是否有id，判断是否是新数据
+     * 1.有id
+     * - type == add ，往购物车追加数量+1
+     * - type == del
+     *   - 将购物车的商品数量-1
+     *   - 当购物车的商品数量只有1的时候，直接删除购物车
+     * 2.无id
+     * - 只有新增的情况，新增一条购物车数据，数量直接为1
+     */
+    const validate = this.app.validator.validate({ id: 'string?', user_id: 'string', product_id: 'string', spu: 'string', price: 'string', title: 'string', quantity: 'string', specifications: 'string', product_image: 'string', type: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
