@@ -560,70 +560,68 @@ class HomeController extends Controller {
       return pre + next.quantity
     }, 0)
 
-    // 记录订单的状态 1 待付款 2 待发货
-    let status = 1
-    // 订单生成的消息
-    let msg = ''
+    const conn = await this.app.mysql.beginTransaction(); // 初始化事务
 
-    // 是否付款
-    if (isPay) {
-      // 判断用户余额是否大于等于总价格
-      const currentUserRes = await ctx.service.wxUser.getWxUserInfoById({ id: user_id });
+    try {
+      // 记录订单的状态 1 待付款 2 待发货
+      let status = 1
+      // 订单生成的消息
+      let msg = ''
 
-      if (Number(currentUserRes.balance) >= Number(total_amount)) {
-        status = 2
-        msg = '订单已生成，付款成功.'
-        // 付款成功，修改用户余额
-        const balance = Number(currentUserRes.balance) - Number(total_amount)
-        await ctx.service.wxUser.updateUser({ id: user_id, balance });
+      // 是否付款
+      if (isPay) {
+        // 判断用户余额是否大于等于总价格
+        const currentUserRes = await ctx.service.wxUser.getWxUserInfoById({ id: user_id });
+
+        if (Number(currentUserRes.balance) >= Number(total_amount)) {
+          status = 2
+          msg = '订单已生成，付款成功.'
+          // 付款成功，修改用户余额
+          const balance = Number(currentUserRes.balance) - Number(total_amount)
+          await conn.update('wx_user', { id: user_id, balance });
+        } else {
+          status = 1
+          msg = '订单已生成，付款失败 用户余额不足，待付款.'
+        }
       } else {
         status = 1
-        msg = '订单已生成，付款失败 用户余额不足，待付款.'
+        msg = '订单已生成，待付款.'
       }
-    } else {
-      status = 1
-      msg = '订单已生成，待付款.'
-    }
 
-    // 生成订单组装参数
-    const insertParams = {
-      ...rest,
-      order_number,
-      user_id,
-      cart_ids,
-      total_amount,
-      total_quantity,
-      status,
-    }
+      // 生成订单组装参数
+      const insertParams = {
+        ...rest,
+        order_number,
+        user_id,
+        cart_ids,
+        total_amount,
+        total_quantity,
+        status,
+      }
 
-    const result = await ctx.service.order.insertOrder(insertParams);
+      await conn.insert('order', insertParams);
 
-    if (!result) {
+      // 订单成功生成后，需要编辑购物车状态
+      for (let i = 0; i < cartInfoList.length; i++) {
+        const { id, quantity, product_id } = cartInfoList[i]
+
+        await conn.update('shopping_cart', { id, is_delete: 0 });
+        await conn.query(`UPDATE product SET inventory = (inventory - ${quantity}) where id = ${product_id}`);
+      }
+
       ctx.body = {
-        code: '-1',
-        msg: '订单生成失败.',
+        code: '1',
+        msg,
         result: {
-          value: 0,
+          value: 1,
         },
       };
-      return;
+
+      await conn.commit(); // 提交事务
+    } catch (err) {
+      await conn.rollback(); // 一定记得捕获异常后回滚事务！！
+      throw err;
     }
-
-    // 订单成功生成后，需要编辑购物车状态
-    cartInfoList.forEach(async item => {
-      const params = { id: item.id, is_delete: 0 }
-      await ctx.service.shoppingCart.updateShoppingCart(params);
-      // 对应商品的库存减少
-      await ctx.service.product.updateProductBySql(`UPDATE product SET inventory = (inventory - ${item.quantity}) where id = ${item.product_id}`);
-    })
-
-    ctx.body = {
-      code: '1',
-      msg,
-      result: {
-        value: result.res.affectedRows,
-      },
-    };
   }
   /**
     * @summary 获取当前用户的订单接口
