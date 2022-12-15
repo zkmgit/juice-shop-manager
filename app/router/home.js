@@ -19,7 +19,9 @@ module.exports = app => {
   // 购物车
   router.get('/wxApi/shoppingCart/getAllShoppingCartList/:id', controller.home.getAllShoppingCartList);
   router.post('/wxApi/shoppingCart/insertAndSaveShoppingCart', controller.home.insertAndSaveShoppingCart);
+  router.delete('/wxApi/shoppingCart/batchDelShoppingCart/:ids', controller.home.batchDelShoppingCart);
   // 订单
+  router.get('/wxApi/order/checkInventory/:id', controller.home.checkInventory);
   router.post('/wxApi/order/insertOrder', controller.home.insertOrder);
   router.get('/wxApi/order/getAllOrderList/:id', controller.home.getAllOrderList);
 };

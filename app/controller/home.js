@@ -15,12 +15,10 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
     /**
-     * 1.生成订单逻辑
-     * - 生成订单的时候，校验一遍商品的库存是否充足，不足则提示xx商品库存不足，请调整购物车
-     * - 对应产品库存减少，购买人数量加1
-     * 2.商品缺少字段
+     * 1.商品缺少字段
      * - 原价，现价
      */
+
     ctx.body = 'hi egg';
   }
   /**
@@ -476,6 +474,47 @@ class HomeController extends Controller {
     };
   }
   /**
+    * @summary 生成订单前，校验商品库存是否充足
+    * @description 生成订单前，校验商品库存是否充足
+    * @router get /wxApi/order/checkInventory/:id
+    * @Request query integer *id 用户id
+    * @response 200 JsonBody 返回结果
+  */
+   async checkInventory() {
+    const { ctx } = this;
+    const { id } = ctx.params;
+    // 校验一遍商品的库存是否充足，不足则提示xx商品库存不足，请调整购物车 
+    const sql = `SELECT p.title, s.quantity, p.inventory FROM shopping_cart AS s INNER JOIN product AS p ON s.product_id = p.id AND s.user_id = ${id} AND s.is_delete = 1`;
+    
+    const { result } = await ctx.service.shoppingCart.getAllShoppingCartList(sql);
+
+    if (result.length === 0) {
+      ctx.body = {
+        code: '1',
+        msg: 'success',
+        result: {
+          value: true,
+        },
+      };
+      return;
+    }
+
+    const msg = []
+    result.forEach(item => {
+      if (item.quantity > item.inventory) {
+        msg.push(`[${item.title}] 库存不足，剩余${item.inventory}件，购物车的商品数量为${item.quantity}件，请调整您的购物车！`);
+      }
+    })
+
+    ctx.body = {
+      code: '-1',
+      msg: msg.join(','),
+      result: {
+        value: false,
+      },
+    };
+  }
+  /**
     * @summary 生成订单
     * @description 生成订单
     * @router post /wxApi/order/insertOrder
@@ -571,9 +610,11 @@ class HomeController extends Controller {
     }
 
     // 订单成功生成后，需要编辑购物车状态
-    cartInfoList.map(item => item.id).forEach(async id => {
-      const params = { id, is_delete: 0 }
+    cartInfoList.forEach(async item => {
+      const params = { id: item.id, is_delete: 0 }
       await ctx.service.shoppingCart.updateShoppingCart(params);
+      // 对应商品的库存减少
+      await ctx.service.product.updateProductBySql(`UPDATE product SET inventory = (inventory - ${item.quantity}) where id = ${item.product_id}`);
     })
 
     ctx.body = {
