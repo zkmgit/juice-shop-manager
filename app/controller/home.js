@@ -14,10 +14,6 @@ class HomeController extends Controller {
     */
   async index() {
     const { ctx } = this;
-    /**
-     * 1.商品缺少字段
-     * - 原价，现价
-     */
 
     ctx.body = 'hi egg';
   }

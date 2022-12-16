@@ -85,7 +85,7 @@ class ProductController extends Controller {
     const { ctx } = this;
     const params = ctx.request.body;
     // 字段校验
-    const validate = this.app.validator.validate({ title: 'string', image: 'string', status: 'string', price: 'string', details_img: 'string', category_id: 'string', categoryName: 'string', inventory: 'string', attributes: 'string', attributesName: 'string', remark: 'string' }, params);
+    const validate = this.app.validator.validate({ title: 'string', image: 'string', status: 'string', price: 'string', original_price: 'string', details_img: 'string', category_id: 'string', categoryName: 'string', inventory: 'string', attributes: 'string', attributesName: 'string', remark: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
@@ -135,7 +135,7 @@ class ProductController extends Controller {
     const { ctx } = this;
     const params = ctx.request.body;
     // 字段校验
-    const validate = this.app.validator.validate({ id: 'string', status: 'string', title: 'string', image: 'string', price: 'string', details_img: 'string', category_id: 'string', categoryName: 'string', inventory: 'string', attributes: 'string', attributesName: 'string', remark: 'string' }, params);
+    const validate = this.app.validator.validate({ id: 'string', status: 'string', title: 'string', image: 'string', price: 'string', original_price: 'string', details_img: 'string', category_id: 'string', categoryName: 'string', inventory: 'string', attributes: 'string', attributesName: 'string', remark: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
