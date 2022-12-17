@@ -376,7 +376,7 @@ class HomeController extends Controller {
     */
 
     // 字段校验
-    const validate = this.app.validator.validate({ id: 'string?', user_id: 'string', product_id: 'string', specifications: 'string', type: 'string' }, params);
+    const validate = this.app.validator.validate({ user_id: 'string', product_id: 'string', specifications: 'string', type: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
@@ -389,10 +389,12 @@ class HomeController extends Controller {
       return;
     }
 
+    // 判断当前用户是否存在这个购物车
+    const cartInfo = await ctx.service.shoppingCart.getShoppingCartInfoById({ user_id: params.user_id, product_id: params.product_id, is_delete: 1 });
+
     let result = null;
 
-    if (Reflect.has(params, 'id')) {
-      const cartInfo = await ctx.service.shoppingCart.getShoppingCartInfoById({ id: params.id });
+    if (cartInfo) {
       // 根据type增加或者减少购物车的商品数量
       const { id, quantity } = cartInfo
 
