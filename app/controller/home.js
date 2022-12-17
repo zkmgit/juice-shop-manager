@@ -376,7 +376,7 @@ class HomeController extends Controller {
     */
 
     // 字段校验
-    const validate = this.app.validator.validate({ id: 'string?', user_id: 'string', product_id: 'string', spu: 'string', price: 'string', title: 'string', quantity: 'string', specifications: 'string', product_image: 'string', type: 'string' }, params);
+    const validate = this.app.validator.validate({ id: 'string?', user_id: 'string', product_id: 'string', specifications: 'string', type: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
@@ -409,7 +409,22 @@ class HomeController extends Controller {
         }
       }
     } else {
-      result = await ctx.service.shoppingCart.insertShoppingCart(params);
+      // 根据产品id获取产品信息
+      const productInfo = await ctx.service.product.getProductInfoById({ id: params.product_id });
+
+      const { spu, price, title, image } = productInfo;
+      const insertCartParams = {
+        user_id: params.user_id,
+        product_id: params.product_id,
+        spu,
+        price,
+        title,
+        quantity: 1,
+        specifications: params.specifications,
+        product_image: image,
+      }
+
+      result = await ctx.service.shoppingCart.insertShoppingCart(insertCartParams);
     }
 
 

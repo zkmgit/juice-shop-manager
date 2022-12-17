@@ -324,12 +324,7 @@ module.exports = {
     param: { type: 'string', required: true, example: {
       user_id: '用户id',
       product_id: '产品id',
-      spu: "产品标识",
-      title: "吹风机2",
-      price: '产品数量',
-      quantity: '产品数量',
       specifications: "产品规格",
-      product_image: "产品主图",
       type: "根据类型区分购物车的商品数量是否增加或者减少",
     } },
   },
