@@ -41,7 +41,7 @@ class HomeController extends Controller {
       return;
     }
 
-    const result = await ctx.service.wxUser.getWxUserInfoById({ open_id: params.openid, session_key: params.session_key });
+    const result = await ctx.service.wxUser.getWxUserInfoById({ open_id: params.openid });
 
     // 登录成功生成token
     const token = this.app.jwt.sign(params, this.app.config.jwt.secret, { expiresIn: '2h' });
@@ -67,7 +67,7 @@ class HomeController extends Controller {
         return;
       }
 
-      const newUser = await ctx.service.wxUser.getWxUserInfoById({ open_id: params.openid, session_key: params.session_key });
+      const newUser = await ctx.service.wxUser.getWxUserInfoById({ open_id: params.openid });
   
       ctx.body = {
         code: '1',
