@@ -320,6 +320,34 @@ class HomeController extends Controller {
     };
   }
   /**
+    * @summary 根据属性ids获取属性详情
+    * @description 根据属性ids获取属性详情
+    * @router get /wxApi/attribute/getAttributesByIds/:ids
+    * @response 200 AttributeJsonBody 返回结果
+  */
+   async getAttributesByIds() {
+     const { ctx } = this;
+     const params = ctx.params;
+     
+     const sql = `SELECT * FROM attribute WHERE id in (${params.ids})`;
+    const { result } = await ctx.service.attribute.getAllAttributeList(sql);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: [],
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result,
+    };
+  }
+  /**
     * @summary 获取当前用户的购物车列表
     * @description 获取当前用户的购物车列表  入参 当前登录用户的id
     * @router get /wxApi/shoppingCart/getAllShoppingCartList/:id

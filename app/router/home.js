@@ -10,6 +10,8 @@ module.exports = app => {
   router.get('/wxApi/system/carouselImageList', controller.home.carouselImageList);
   // 类目
   router.get('/wxApi/category/getAllCategoryList', controller.home.getAllCategoryList);
+  // 属性
+  router.get('/wxApi/attribute/getAttributesByIds/:ids', controller.home.getAttributesByIds);
   // 产品
   router.post('/wxApi/product/getAllProductList', controller.home.getAllProductList);
   // 根据分类id获取产品信息
