@@ -242,8 +242,14 @@ class HomeController extends Controller {
    async getProductInfoById() {
     const { ctx } = this;
     const params = ctx.params;
+    // sql组装
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
+    const suffix = `limit 1 offset 0`;
+    let buildSql = `Where is_delete = '1' AND status = '1' AND id = '${params.id}'`;
 
-    const { result } = await ctx.service.product.getProductInfoById({ id: params.id });
+    const sql = `${prefix} ${buildSql} ${suffix}`;
+
+    const { result } = await ctx.service.product.getAllProductList(sql);
 
     if (!result) {
       ctx.body = {
@@ -257,7 +263,7 @@ class HomeController extends Controller {
     ctx.body = {
       code: '1',
       msg: 'success',
-      result,
+      result: result[0],
     };
   }
   /**
@@ -440,9 +446,15 @@ class HomeController extends Controller {
       }
     } else {
       // 根据产品id获取产品信息
-      const productInfo = await ctx.service.product.getProductInfoById({ id: params.product_id });
+      const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
+      const suffix = `limit 1 offset 0`;
+      let buildSql = `Where is_delete = '1' AND status = '1' AND id = '${params.product_id}'`;
 
-      const { spu, price, title, image } = productInfo;
+      const sql = `${prefix} ${buildSql} ${suffix}`;
+
+      const productInfoRes = await ctx.service.product.getAllProductList(sql);
+
+      const { spu, price, title, image } = productInfoRes.result[0];
       const insertCartParams = {
         user_id: params.user_id,
         product_id: params.product_id,

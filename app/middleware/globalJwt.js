@@ -8,6 +8,11 @@ const whiteList = [ '/wxApi/user/getToken', '/wxApi/user/login', '/wxApi/system/
 
 module.exports = () => {
   return async function(ctx, next) {
+    // 微信接口白名单
+    if (ctx.request.url.indexOf('/wxApi/product/getProductInfoById') !== -1 || ctx.request.url.indexOf('/wxApi/product/getAllProductListByCategoryId') !== -1 || ctx.request.url.indexOf('/wxApi/attribute/getAttributesByIds') !== -1) {
+      await next();
+      return
+    }
     if (!whiteList.some(item => item === ctx.request.url)) { // 判断接口路径是否在白名单
       const token = ctx.request.header.authorization;// 拿到token
 
