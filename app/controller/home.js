@@ -209,7 +209,7 @@ class HomeController extends Controller {
     const params = ctx.params;
     
     // sql组装
-    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.original_price,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
     const suffix = `limit 999 offset 0`;
     let buildSql = `Where is_delete = '1' AND status = '1' AND category_id = '${params.id}'`;
 
@@ -243,7 +243,7 @@ class HomeController extends Controller {
     const { ctx } = this;
     const params = ctx.params;
     // sql组装
-    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.original_price,p.status,p.buy_quantity,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
     const suffix = `limit 1 offset 0`;
     let buildSql = `Where is_delete = '1' AND status = '1' AND id = '${params.id}'`;
 
@@ -292,7 +292,7 @@ class HomeController extends Controller {
     }
     
     // sql组装
-    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.original_price,p.details_img,p.status,p.buy_quantity,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
     const suffix = `limit ${params.ps} offset ${(params.pn - 1) * params.ps}`;
     let buildSql = `Where is_delete = '1' AND status = '1'`;
     
@@ -350,7 +350,12 @@ class HomeController extends Controller {
     ctx.body = {
       code: '1',
       msg: 'success',
-      result,
+      result: result.map(item => {
+        return {
+          ...item,
+          attributeValue: item.attribute_value.split(','),
+        }
+      }),
     };
   }
   /**
