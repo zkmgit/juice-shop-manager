@@ -456,14 +456,14 @@ class HomeController extends Controller {
       const { id, quantity } = cartInfo
 
       if (params.type === 'add') {
-          result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity + params.quantity });
+          result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity + Number(params.quantity) });
       } else {
         if (+quantity === 1) {
           // 当购物车的商品数量只有1时，则直接删除购物车
           result = await ctx.service.shoppingCart.updateShoppingCart({ id, is_delete: 0 });
         } else {
           // 当购物车的商品数量大于1时，则直接购物车的商品数量 -1
-          result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity - params.quantity });
+          result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity - Number(params.quantity) });
         }
       }
     }
