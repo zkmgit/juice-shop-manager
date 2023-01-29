@@ -326,6 +326,7 @@ module.exports = {
       product_id: '产品id',
       specifications: "产品规格",
       type: "根据类型区分购物车的商品数量是否增加或者减少",
+      quantity: '数量'
     } },
   },
   // 订单

@@ -402,20 +402,9 @@ class HomeController extends Controller {
    async insertAndSaveShoppingCart() {
     const { ctx } = this;
     const params = ctx.request.body;
-    /**
-     * type [add, del]  根据类型去编辑购物车数量
-     * 根据是否有id，判断是否是新数据
-     * 1.有id
-     * - type == add ，往购物车追加数量+1
-     * - type == del
-     *   - 将购物车的商品数量-1
-     *   - 当购物车的商品数量只有1的时候，直接删除购物车
-     * 2.无id
-     * - 只有新增的情况，新增一条购物车数据，数量直接为1
-    */
 
     // 字段校验
-    const validate = this.app.validator.validate({ user_id: 'string', product_id: 'string', specifications: 'string', type: 'string' }, params);
+    const validate = this.app.validator.validate({ user_id: 'string', product_id: 'string', specifications: 'string', type: 'string', quantity: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
@@ -428,29 +417,17 @@ class HomeController extends Controller {
       return;
     }
 
+     // - 存在：添加或者删除购物车的数量 注：当删除到数量为1的时候，购物车这条数据直接删除
+    // -不存在：直接新增一只购物车
+    // - 类型 type （add  del）
+
     // 判断当前用户是否存在这个购物车
-    const cartInfo = await ctx.service.shoppingCart.getShoppingCartInfoById({ user_id: params.user_id, product_id: params.product_id, is_delete: 1 });
+    const cartInfo = await ctx.service.shoppingCart.getShoppingCartInfoById({ user_id: params.user_id, product_id: params.product_id, specifications: params.specifications, is_delete: 1 });
 
     let result = null;
 
-    if (cartInfo) {
-      // 根据type增加或者减少购物车的商品数量
-      const { id, quantity } = cartInfo
-
-      if (params.type === 'add') {
-        // 当购物车的商品数量直接 +1
-          result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity + 1 });
-      } else {
-        if (+quantity === 1) {
-          // 当购物车的商品数量只有1时，则直接删除购物车
-          result = await ctx.service.shoppingCart.updateShoppingCart({ id, is_delete: 0 });
-        } else {
-          // 当购物车的商品数量大于1时，则直接购物车的商品数量 -1
-          result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity - 1 });
-        }
-      }
-    } else {
-      // 根据产品id获取产品信息
+    if (!cartInfo) {
+      // 购物车不存在
       const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
       const suffix = `limit 1 offset 0`;
       let buildSql = `Where is_delete = '1' AND status = '1' AND id = '${params.product_id}'`;
@@ -460,20 +437,36 @@ class HomeController extends Controller {
       const productInfoRes = await ctx.service.product.getAllProductList(sql);
 
       const { spu, price, title, image } = productInfoRes.result[0];
+
       const insertCartParams = {
         user_id: params.user_id,
         product_id: params.product_id,
         spu,
         price,
         title,
-        quantity: 1,
+        quantity: params.quantity,
         specifications: params.specifications,
         product_image: image,
       }
 
       result = await ctx.service.shoppingCart.insertShoppingCart(insertCartParams);
-    }
+    } else {
+      // 购物车存在
+      // 根据type增加或者减少购物车的商品数量
+      const { id, quantity } = cartInfo
 
+      if (params.type === 'add') {
+          result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity + params.quantity });
+      } else {
+        if (+quantity === 1) {
+          // 当购物车的商品数量只有1时，则直接删除购物车
+          result = await ctx.service.shoppingCart.updateShoppingCart({ id, is_delete: 0 });
+        } else {
+          // 当购物车的商品数量大于1时，则直接购物车的商品数量 -1
+          result = await ctx.service.shoppingCart.updateShoppingCart({ id, quantity: quantity - params.quantity });
+        }
+      }
+    }
 
     if (!result) {
       ctx.body = {
