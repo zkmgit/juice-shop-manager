@@ -589,7 +589,7 @@ class HomeController extends Controller {
       return;
     }
 
-    const { cartInfoList, ...rest  } = params
+    const { cartInfoList, isPay, ...rest  } = params
     
     // 订单编号 J-当前日期+5位数 系统生成
     const { total } = await ctx.service.order.getOrderTotal();
@@ -599,16 +599,19 @@ class HomeController extends Controller {
     const user_id = cartInfoList[0].user_id
     // 购车车ids
     const cart_ids = cartInfoList.map(item => item.id).join(',')
+
+    // 需要判断同商品不同规格的情况下  商品数量是否满足  todo1
+    
     // 总价格
     const total_amount = cartInfoList.reduce((pre, next) => {
       const { price, quantity } = next
 
-      const amount = ((price * 100) * quantity) / 100
-      return pre + amount
+      const amount = ((Number(price) * 100) * Number(quantity)) / 100
+      return pre + Number(amount)
     }, 0)
     // 总商品数
     const total_quantity = cartInfoList.reduce((pre, next) => {
-      return pre + next.quantity
+      return pre + Number(next.quantity)
     }, 0)
 
     const conn = await this.app.mysql.beginTransaction(); // 初始化事务
@@ -652,7 +655,7 @@ class HomeController extends Controller {
 
       await conn.insert('order', insertParams);
 
-      // 订单成功生成后，需要编辑购物车状态
+      // 订单成功生成后，需要编辑购物车状态 商品库存减少
       for (let i = 0; i < cartInfoList.length; i++) {
         const { id, quantity, product_id } = cartInfoList[i]
 
