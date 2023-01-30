@@ -600,8 +600,22 @@ class HomeController extends Controller {
     // 购车车ids
     const cart_ids = cartInfoList.map(item => item.id).join(',')
 
-    // 需要判断同商品不同规格的情况下  商品数量是否满足  todo1
+    // 需要判断同商品不同规格的情况下  商品数量是否满足
+    const sql = 'SELECT s.product_id,SUM(s.quantity) as quantity,p.inventory,p.title FROM shopping_cart s INNER JOIN product p ON p.id = s.product_id GROUP BY product_id;'
+    const result = await this.app.mysql.query(sql);
     
+    const row = result.find(item => item.quantity > item.inventory);
+
+    if (row) {
+      ctx.body = {
+        code: '-1',
+        msg: `${row.title} 库存不足,该商品当前库存为${row.inventory},请您调整购物车数量 重新下单.`,
+        result: {
+          value: 0,
+        },
+      };
+      return
+    }
     // 总价格
     const total_amount = cartInfoList.reduce((pre, next) => {
       const { price, quantity } = next
