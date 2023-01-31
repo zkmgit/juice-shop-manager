@@ -576,7 +576,7 @@ class HomeController extends Controller {
     const { ctx } = this;
     const params = ctx.request.body;
     // 字段校验
-    const validate = this.app.validator.validate({ isPay: 'boolean', cartInfoList: 'array', receiver: 'string', address: 'string', phone: 'string', remark: 'string' }, params);
+    const validate = this.app.validator.validate({ isPay: 'string', cartInfoList: 'string', receiver: 'string', address: 'string', phone: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
@@ -589,22 +589,24 @@ class HomeController extends Controller {
       return;
     }
 
-    const { cartInfoList, isPay, ...rest  } = params
+    const { cartInfoList, isPay, ...rest  } = params;
+
+    const parseCartInfoList = JSON.parse(cartInfoList);
     
     // 订单编号 J-当前日期+5位数 系统生成
     const { total } = await ctx.service.order.getOrderTotal();
     
     const order_number = `J-${formatDateTime(new Date(), 'YYYYMMDD')}${10000 + total}`
     // 用户id
-    const user_id = cartInfoList[0].user_id
+    const user_id = parseCartInfoList[0].user_id
     // 购车车ids
-    const cart_ids = cartInfoList.map(item => item.id).join(',')
+    const cart_ids = parseCartInfoList.map(item => item.id).join(',')
 
     // 需要判断同商品不同规格的情况下  商品数量是否满足
-    const sql = 'SELECT s.product_id,SUM(s.quantity) as quantity,p.inventory,p.title FROM shopping_cart s INNER JOIN product p ON p.id = s.product_id GROUP BY product_id;'
+    const sql = `SELECT s.product_id,SUM(s.quantity) as quantity,p.inventory,p.title FROM shopping_cart s INNER JOIN product p ON s.id in (${cart_ids}) AND p.id = s.product_id GROUP BY product_id`;
     const result = await this.app.mysql.query(sql);
     
-    const row = result.find(item => item.quantity > item.inventory);
+    const row = result.find(item => +item.quantity > +item.inventory);
 
     if (row) {
       ctx.body = {
@@ -617,14 +619,14 @@ class HomeController extends Controller {
       return
     }
     // 总价格
-    const total_amount = cartInfoList.reduce((pre, next) => {
+    const total_amount = parseCartInfoList.reduce((pre, next) => {
       const { price, quantity } = next
 
       const amount = ((Number(price) * 100) * Number(quantity)) / 100
       return pre + Number(amount)
     }, 0)
     // 总商品数
-    const total_quantity = cartInfoList.reduce((pre, next) => {
+    const total_quantity = parseCartInfoList.reduce((pre, next) => {
       return pre + Number(next.quantity)
     }, 0)
 
@@ -637,7 +639,7 @@ class HomeController extends Controller {
       let msg = ''
 
       // 是否付款
-      if (isPay) {
+      if (isPay === '1') {
         // 判断用户余额是否大于等于总价格
         const currentUserRes = await ctx.service.wxUser.getWxUserInfoById({ id: user_id });
 
@@ -670,8 +672,8 @@ class HomeController extends Controller {
       await conn.insert('order', insertParams);
 
       // 订单成功生成后，需要编辑购物车状态 商品库存减少
-      for (let i = 0; i < cartInfoList.length; i++) {
-        const { id, quantity, product_id } = cartInfoList[i]
+      for (let i = 0; i < parseCartInfoList.length; i++) {
+        const { id, quantity, product_id } = parseCartInfoList[i]
 
         await conn.update('shopping_cart', { id, is_delete: 0 });
         await conn.query(`UPDATE product SET inventory = (inventory - ${quantity}) where id = ${product_id}`);
@@ -840,7 +842,7 @@ class HomeController extends Controller {
     const { ctx } = this;
     const params = ctx.request.body;
     // 字段校验
-    const validate = this.app.validator.validate({ pn: 'string', ps: 'string' }, params);
+    const validate = this.app.validator.validate({ pn: 'string', ps: 'string', user_id: 'string' }, params);
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
@@ -856,7 +858,7 @@ class HomeController extends Controller {
      // sql组装
      const prefix = 'SELECT a.id,a.name,a.user_id,a.area,a.address,a.phone,a.status,a.is_delete,a.create_time,a.update_time FROM addr AS a';
      const suffix = `limit ${params.ps} offset ${(params.pn - 1) * params.ps}`;
-     let buildSql = `Where status = '1' AND is_delete = '1'`;
+     let buildSql = `Where status = '1' AND is_delete = '1' AND user_id = '${params.user_id}'`;
  
      // 组装sql语句
      const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
