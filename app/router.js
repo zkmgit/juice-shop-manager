@@ -12,8 +12,9 @@
  * shoppingCart 购物车模块
  * order 订单模块
  * logistics 物流模块
+ * addr 地址模块
  */
-const routerFileNames = [ 'home', 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order', 'logistics', 'wxUser' ];
+const routerFileNames = [ 'home', 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order', 'logistics', 'wxUser', 'addr' ];
 /**
  * @param {Egg.Application} app - egg application
  */
