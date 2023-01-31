@@ -23,7 +23,13 @@ module.exports = app => {
   router.post('/wxApi/shoppingCart/insertAndSaveShoppingCart', controller.home.insertAndSaveShoppingCart);
   router.delete('/wxApi/shoppingCart/batchDelShoppingCart/:ids', controller.home.batchDelShoppingCart);
   // 订单
-  router.get('/wxApi/order/checkInventory/:id', controller.home.checkInventory);
+  // router.get('/wxApi/order/checkInventory/:id', controller.home.checkInventory);
   router.post('/wxApi/order/insertOrder', controller.home.insertOrder);
   router.get('/wxApi/order/getAllOrderList/:id', controller.home.getAllOrderList);
+  // 地址
+  router.post('/wxApi/addr/getAllAddrList', controller.home.getAllAddrList);
+  router.post('/wxApi/addr/insertAddr', controller.home.insertAddr);
+  router.put('/wxApi/addr/updateAddr', controller.home.updateAddr);
+  router.put('/wxApi/addr/deleteAddr', controller.home.deleteAddr);
+  router.get('/wxApi/addr/getDefaultAddr', controller.home.getDefaultAddr);
 };

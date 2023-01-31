@@ -796,6 +796,233 @@ class HomeController extends Controller {
       },
     };
   }
+  /**
+    * @summary 获取默认地址
+    * @description 获取默认地址
+    * @router get /wxApi/addr/getDefaultAddr
+    * @response 200 AttributeJsonBody 返回结果
+  */
+   async getDefaultAddr() {
+    const { ctx } = this;
+     // sql组装
+     const prefix = 'SELECT a.id,a.name,a.user_id,a.area,a.address,a.phone,a.status,a.is_delete,a.create_time,a.update_time FROM addr AS a';
+     const suffix = `limit 1 offset 0`;
+     let buildSql = `Where status = '1' AND is_delete = '1'`;
+ 
+     // 组装sql语句
+     const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
+
+    const { result } = await ctx.service.addr.getAllAddrList(sql);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {},
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: result[0],
+    };
+  }
+  /**
+    * @summary 地址列表
+    * @description 地址列表
+    * @router post /wxApi/addr/getAllAddrList
+    * @request body AttributeQueryParams
+    * @response 200 AttributeJsonBody 返回结果
+  */
+   async getAllAddrList() {
+    const { ctx } = this;
+    const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ pn: 'string', ps: 'string' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
+      return;
+    }
+
+     // sql组装
+     const prefix = 'SELECT a.id,a.name,a.user_id,a.area,a.address,a.phone,a.status,a.is_delete,a.create_time,a.update_time FROM addr AS a';
+     const suffix = `limit ${params.ps} offset ${(params.pn - 1) * params.ps}`;
+     let buildSql = `Where status = '1' AND is_delete = '1'`;
+ 
+     // 组装sql语句
+     const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
+
+    const { result, total } = await ctx.service.addr.getAllAddrList(sql);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {},
+        total: 0,
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: result.map(item => {
+        return {
+          ...item,
+          statusName: item.status === 1 ? '启用' : item.status === 0 ? '禁用' : '',
+          createTime: formatDateTime(item.create_time),
+          updateTime: formatDateTime(item.update_time)
+        };
+      }),
+      total,
+    };
+  }
+  /**
+    * @summary 地址新增
+    * @description 地址新增
+    * @router post /wxApi/addr/insertAddr
+    * @request body AddAttributeParams
+    * @response 200 JsonBody 返回结果
+  */
+   async insertAddr() {
+    const { ctx } = this;
+    const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ user_id: 'string', name: 'string', area: 'string', address: 'string', phone: 'string' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+     
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
+      return;
+    }
+
+    const result = await ctx.service.addr.insertAddr(params);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {
+          value: 0,
+        },
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: {
+        value: result.res.affectedRows,
+      },
+    };
+  }
+  /**
+    * @summary 地址编辑
+    * @description 地址编辑
+    * @router put /wxApi/addr/updateAddr
+    * @request body EditAttributeParams
+    * @response 200 JsonBody 返回结果
+  */
+  async updateAddr() {
+    const { ctx } = this;
+    const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ id: 'number', user_id: 'string', name: 'string', area: 'string', address: 'string', phone: 'string' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
+      return;
+    }
+
+    const result = await ctx.service.addr.updateAddr(params);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {
+          value: 0,
+        },
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: {
+        value: result.res.affectedRows,
+      },
+    };
+
+  }
+  /**
+    * @summary 软删除地址
+    * @description 软删除地址
+    * @router put /wxApi/addr/deleteAddr
+    * @Request query integer *id 地址id
+    * @response 200 JsonBody 返回结果
+  */
+  async deleteAddr() {
+    const { ctx } = this;
+    const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ id: 'number', is_delete: 'string' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+      
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
+      return;
+    }
+
+    const result = await ctx.service.addr.updateAddr(params);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {
+          value: 0,
+        },
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: {
+        value: result.res.affectedRows,
+      },
+    };
+  }
 }
 
 module.exports = HomeController;
