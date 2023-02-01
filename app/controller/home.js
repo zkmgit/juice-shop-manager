@@ -733,10 +733,49 @@ class HomeController extends Controller {
     const cartInfos = await Promise.all(promiseList);
     // 获取购物车信息
     result.forEach((item, index) => {
-      item.cartInfo = cartInfos[index];
+      item.cartInfo = cartInfos[index].result;
       item.createTime = formatDateTime(item.create_time);
       item.updateTime = formatDateTime(item.update_time);
     })
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result,
+    };
+  }
+  /**
+    * @summary 根据订单id获取订单信息
+    * @description 根据订单id获取订单信息
+    * @router get /wxApi/order/getOrderInfoById/:id
+    * @response 200 OrderJsonBody 返回结果
+  */
+   async getOrderInfoById() {
+    const { ctx } = this;
+    const params = ctx.params;
+
+    const result = await ctx.service.order.getOrderInfoById({ id: params.id });
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {},
+      };
+      return;
+    }
+
+    // sql组装
+    const cart_prefix = 'SELECT s.id,s.user_id,s.product_id,s.spu,s.title,s.price,s.quantity,s.specifications,s.product_image,s.is_delete,s.create_time,s.update_time FROM `shopping_cart` AS s';
+    const cart_suffix = ` Where id in (${result.cart_ids}) limit 999 offset 0`;
+
+    const cart_sql = `${cart_prefix}${cart_suffix}`;
+
+    const cartInfos = await ctx.service.shoppingCart.getAllShoppingCartList(cart_sql);
+
+    result.cartInfo = cartInfos.result;
+    result.createTime = formatDateTime(result.create_time);
+    result.updateTime = formatDateTime(result.update_time);
 
     ctx.body = {
       code: '1',

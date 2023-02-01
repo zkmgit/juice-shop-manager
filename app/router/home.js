@@ -26,6 +26,7 @@ module.exports = app => {
   // router.get('/wxApi/order/checkInventory/:id', controller.home.checkInventory);
   router.post('/wxApi/order/insertOrder', controller.home.insertOrder);
   router.get('/wxApi/order/getAllOrderList/:id', controller.home.getAllOrderList);
+  router.get('/wxApi/order/getOrderInfoById/:id', controller.home.getOrderInfoById);
   // 地址
   router.post('/wxApi/addr/getAllAddrList', controller.home.getAllAddrList);
   router.post('/wxApi/addr/insertAddr', controller.home.insertAddr);
