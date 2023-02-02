@@ -15,15 +15,6 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    /**
-     * 限时秒杀
-     * 开始时间  当前时间  结束时间
-     * [用时间戳比较]
-     * 进行倒计时条件
-     *  -开始时间 <= 当前时间
-     *  -结束时间 >= 当前时间
-     */
-
     ctx.body = 'hi egg';
   }
   /**
@@ -376,6 +367,40 @@ class HomeController extends Controller {
       code: '1',
       msg: 'success',
       result: dealResult,
+    };
+  }
+  /**
+    * @summary 获取爆品推荐数据
+    * @description 获取爆品推荐数据
+    * @router get /wxApi/product/getAllRecommendedProductList
+    * @response 200 ProductJsonBody 返回结果
+  */
+   async getAllRecommendedProductList() {
+    const { ctx } = this;
+    
+    // sql组装
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.original_price,p.details_img,p.status,p.buy_quantity,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time,p.seckill_start_time,p.seckill_end_time FROM `product` AS p';
+    const suffix = `limit 999 offset 0`;
+    const buildSql = `Where is_delete = '1' AND status = '1' AND categoryName = '爆品推荐'`;
+
+    // 组装sql语句
+    const sql = `${prefix} ${buildSql} ${suffix}`;
+
+    const { result } = await ctx.service.product.getAllProductList(sql);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: [],
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result,
     };
   }
   /**
