@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2023-01-31 16:30:16
+Date: 2023-02-02 15:34:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -143,12 +143,14 @@ CREATE TABLE `product` (
   `attributesName` varchar(255) DEFAULT NULL COMMENT '属性名称',
   `buy_quantity` int(11) DEFAULT '0' COMMENT '用户购买数量',
   `remark` varchar(255) DEFAULT NULL COMMENT '商品描述',
+  `seckill_start_time` timestamp NULL DEFAULT NULL COMMENT '限时秒杀开始时间',
+  `seckill_end_time` timestamp NULL DEFAULT NULL COMMENT '限时秒杀结束时间',
   `is_delete` int(11) DEFAULT '1' COMMENT '软删除 1未删除 0删除',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `title` (`title`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for shopping_cart
@@ -168,7 +170,7 @@ CREATE TABLE `shopping_cart` (
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for user
