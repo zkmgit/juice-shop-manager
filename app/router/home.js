@@ -14,6 +14,7 @@ module.exports = app => {
   router.get('/wxApi/attribute/getAttributesByIds/:ids', controller.home.getAttributesByIds);
   // 产品
   router.post('/wxApi/product/getAllProductList', controller.home.getAllProductList);
+  router.post('/wxApi/product/getAllSeckillProductList', controller.home.getAllSeckillProductList);
   // 根据分类id获取产品信息
   router.get('/wxApi/product/getAllProductListByCategoryId/:id', controller.home.getAllProductListByCategoryId);
   // 根据商品id获取商品详情

@@ -1,7 +1,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-const { formatDateTime } = require('../extend/helper');
+const { formatDateTime, diffDateTime } = require('../extend/helper');
 /**
 * @controller Juice小程序接口文档
 */
@@ -14,6 +14,15 @@ class HomeController extends Controller {
     */
   async index() {
     const { ctx } = this;
+
+    /**
+     * 限时秒杀
+     * 开始时间  当前时间  结束时间
+     * [用时间戳比较]
+     * 进行倒计时条件
+     *  -开始时间 <= 当前时间
+     *  -结束时间 >= 当前时间
+     */
 
     ctx.body = 'hi egg';
   }
@@ -209,7 +218,7 @@ class HomeController extends Controller {
     const params = ctx.params;
     
     // sql组装
-    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.original_price,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.original_price,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time,p.seckill_start_time,p.seckill_end_time FROM `product` AS p';
     const suffix = `limit 999 offset 0`;
     let buildSql = `Where is_delete = '1' AND status = '1' AND category_id = '${params.id}'`;
 
@@ -292,7 +301,7 @@ class HomeController extends Controller {
     }
     
     // sql组装
-    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.original_price,p.details_img,p.status,p.buy_quantity,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time FROM `product` AS p';
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.original_price,p.details_img,p.status,p.buy_quantity,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time,p.seckill_start_time,p.seckill_end_time FROM `product` AS p';
     const suffix = `limit ${params.ps} offset ${(params.pn - 1) * params.ps}`;
     let buildSql = `Where is_delete = '1' AND status = '1'`;
     
@@ -323,6 +332,50 @@ class HomeController extends Controller {
       code: '1',
       msg: 'success',
       result,
+    };
+  }
+  /**
+    * @summary 获取限时秒杀数据
+    * @description 获取限时秒杀数据
+    * @router post /wxApi/product/getAllSeckillProductList
+    * @request body ProductQueryParams
+    * @response 200 ProductJsonBody 返回结果
+  */
+   async getAllSeckillProductList() {
+    const { ctx } = this;
+    
+    // sql组装
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.original_price,p.details_img,p.status,p.buy_quantity,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time,p.seckill_start_time,p.seckill_end_time FROM `product` AS p';
+    const suffix = `limit 999 offset 0`;
+    const buildSql = `Where is_delete = '1' AND status = '1' AND categoryName = '限时秒杀'`;
+
+    // 组装sql语句
+    const sql = `${prefix} ${buildSql} ${suffix}`;
+
+    const { result } = await ctx.service.product.getAllProductList(sql);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: [],
+      };
+      return;
+    }
+
+    // 过滤掉过期的商品 未开始时间的商品  返回倒计时的毫秒数
+    const dealResult = result.filter(item => {
+      return diffDateTime(item.seckill_end_time) < 0 && diffDateTime(item.seckill_start_time) > 0;
+    })
+
+    dealResult.forEach(item => {
+      item.time = diffDateTime(item.seckill_end_time) * -1000;
+    })
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: dealResult,
     };
   }
   /**
