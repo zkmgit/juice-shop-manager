@@ -23,8 +23,8 @@ module.exports = app => {
   router.get('/wxApi/shoppingCart/getAllShoppingCartList/:id', controller.home.getAllShoppingCartList);
   router.post('/wxApi/shoppingCart/insertAndSaveShoppingCart', controller.home.insertAndSaveShoppingCart);
   router.delete('/wxApi/shoppingCart/batchDelShoppingCart/:ids', controller.home.batchDelShoppingCart);
+  router.get('/wxApi/shoppingCart/checkSeckillProduct/:id', controller.home.checkSeckillProduct);
   // 订单
-  // router.get('/wxApi/order/checkInventory/:id', controller.home.checkInventory);
   router.post('/wxApi/order/insertOrder', controller.home.insertOrder);
   router.get('/wxApi/order/getAllOrderList/:id', controller.home.getAllOrderList);
   router.get('/wxApi/order/getOrderInfoById/:id', controller.home.getOrderInfoById);

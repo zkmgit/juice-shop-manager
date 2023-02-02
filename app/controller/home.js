@@ -365,7 +365,7 @@ class HomeController extends Controller {
 
     // 过滤掉过期的商品 未开始时间的商品  返回倒计时的毫秒数
     const dealResult = result.filter(item => {
-      return diffDateTime(item.seckill_end_time) < 0 && diffDateTime(item.seckill_start_time) > 0;
+      return item.seckill_start_time && item.seckill_end_time && diffDateTime(item.seckill_end_time) < 0 && diffDateTime(item.seckill_start_time) > 0;
     })
 
     dealResult.forEach(item => {
@@ -578,17 +578,17 @@ class HomeController extends Controller {
     };
   }
   /**
-    * @summary 生成订单前，校验商品库存是否充足
-    * @description 生成订单前，校验商品库存是否充足
-    * @router get /wxApi/order/checkInventory/:id
+    * @summary 校验购物车的限时秒杀商品是否过期，过期的系统自动删除购物车数据
+    * @description 校验购物车的限时秒杀商品是否过期，过期的系统自动删除购物车数据
+    * @router get /wxApi/shoppingCart/checkSeckillProduct/:id
     * @Request query integer *id 用户id
     * @response 200 JsonBody 返回结果
   */
-   async checkInventory() {
+   async checkSeckillProduct() {
     const { ctx } = this;
     const { id } = ctx.params;
-    // 校验一遍商品的库存是否充足，不足则提示xx商品库存不足，请调整购物车 
-    const sql = `SELECT p.title, s.quantity, p.inventory FROM shopping_cart AS s INNER JOIN product AS p ON s.product_id = p.id AND s.user_id = ${id} AND s.is_delete = 1`;
+    // 校验购物车的限时秒杀商品是否过期，过期则提示xx商品库存不足，请调整购物车
+    const sql = `SELECT s.id,p.title, p.categoryName, p.seckill_start_time,p.seckill_end_time FROM shopping_cart AS s INNER JOIN product AS p ON s.product_id = p.id AND s.user_id = ${id} AND s.is_delete = 1`;
     
     const { result } = await ctx.service.shoppingCart.getAllShoppingCartList(sql);
 
@@ -603,20 +603,44 @@ class HomeController extends Controller {
       return;
     }
 
-    const msg = []
-    result.forEach(item => {
-      if (item.quantity > item.inventory) {
-        msg.push(`[${item.title}] 库存不足，剩余${item.inventory}件，购物车的商品数量为${item.quantity}件，请调整您的购物车！`);
-      }
+    const filterResult = result.filter(item => item.categoryName === '限时秒杀' && item.seckill_start_time && item.seckill_end_time);
+
+    if (filterResult.length === 0) {
+      ctx.body = {
+        code: '1',
+        msg: 'success',
+        result: {
+          value: true,
+        },
+      };
+      return;
+    }
+
+    const msg = '检测到有商品限时秒杀时间过期，系统已自动帮您删除购物车！'
+
+    const ids = filterResult.filter(item => diffDateTime(item.seckill_end_time) > 0).map(sItem => sItem.id)
+    // 删除购物车
+    ids.forEach(async id => {
+      await ctx.service.shoppingCart.updateShoppingCart({ id, is_delete: 0 });
     })
 
-    ctx.body = {
-      code: '-1',
-      msg: msg.join(','),
-      result: {
-        value: false,
-      },
-    };
+    if (ids.length === 0) {
+      ctx.body = {
+        code: '1',
+        msg: 'success',
+        result: {
+          value: true,
+        },
+      };
+    } else {
+      ctx.body = {
+        code: '1',
+        msg,
+        result: {
+          value: false,
+        },
+      };
+    }
   }
   /**
     * @summary 生成订单
