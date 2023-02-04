@@ -2,7 +2,7 @@
 // swagger资源不拦截
 const whiteList = [ '/wxApi/user/getToken', '/wxApi/user/login', '/wxApi/system/carouselImageList', '/wxApi/category/getAllCategoryList', 
                   '/wxApi/product/getAllProductList', '/wxApi/product/getAllProductListByCategoryId/:id', '/api/wxUser/login', '/api/user/login', '/', 
-                  '/wxApi/product/getProductInfoById/:id', '/wxApi/product/getAllSeckillProductList',
+                  '/wxApi/product/getProductInfoById/:id', '/wxApi/product/getAllSeckillProductList', '/wxApi/product/getAllRecommendedProductList',
                   '/swagger-ui.html', '/swagger-ui.css', '/swagger-ui-bundle.js', '/swagger-ui-standalone-preset.js', 
                   '/favicon-32x32.png', '/favicon-16x16.png', '/swagger-doc' ];
 
