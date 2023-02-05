@@ -22,7 +22,8 @@ class UtilsService extends Service {
     const { ctx } = this;
     const stream = await ctx.getFileStream();
     const filename =
-    md5(stream.filename) + path.extname(stream.filename).toLocaleLowerCase();
+    stream.filename.split('.')[0] + path.extname(stream.filename).toLocaleLowerCase();
+    // md5(stream.filename) + path.extname(stream.filename).toLocaleLowerCase();
     const localFilePath = path.join(__dirname, '../public/uploads', filename);
     const writeStream = fs.createWriteStream(localFilePath);
     try {
