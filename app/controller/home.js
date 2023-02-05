@@ -425,6 +425,12 @@ class HomeController extends Controller {
       return;
     }
 
+    result.forEach(item => {
+        const names = item.attribute_name.split('-');
+        item.attributeValue = item.attribute_value.split(',');
+        item.attribute_name = names[names.length-1];
+    })
+
     ctx.body = {
       code: '1',
       msg: 'success',
