@@ -374,7 +374,7 @@ module.exports = {
     param: { type: 'string', required: true, example: {
       cartInfoList: '购物车信息',
       receiver: '收货人',
-      address: '收货地址', 
+      address: '收货地址',
       phone: '电话',
       remark: '订单备注'
     } },
@@ -468,5 +468,20 @@ module.exports = {
     param: { type: 'string', required: true, example: {
       token: 'token',
     } },
-  }
+  },
+  //公告
+  AnnouncementJsonBody: {
+    code: { type: 'string', required: true, example: '1' },
+    msg: { type: 'string', required: true, example: 'success' },
+    result: { type: 'string', required: true, example: [
+        {
+          id: 1,
+          title: '标题',
+          content: '内容',
+          create_time: '2022-11-02T04:28:15.000Z',
+          update_time: '2022-11-02T04:29:06.000Z',
+          is_delete: '是否删除 未删除1 删除0',
+        },
+      ] },
+  },
 };

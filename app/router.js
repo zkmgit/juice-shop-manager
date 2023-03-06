@@ -13,8 +13,9 @@
  * order 订单模块
  * logistics 物流模块
  * addr 地址模块
+ * announce 公告模块
  */
-const routerFileNames = [ 'home', 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order', 'logistics', 'wxUser', 'addr' ];
+const routerFileNames = [ 'home', 'utils', 'user', 'category', 'attribute', 'carouselImage', 'system', 'product', 'shoppingCart', 'order', 'logistics', 'wxUser', 'addr', 'announce' ];
 /**
  * @param {Egg.Application} app - egg application
  */

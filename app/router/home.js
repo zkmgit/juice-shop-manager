@@ -35,4 +35,6 @@ module.exports = app => {
   router.put('/wxApi/addr/updateAddr', controller.home.updateAddr);
   router.put('/wxApi/addr/deleteAddr', controller.home.deleteAddr);
   router.get('/wxApi/addr/getDefaultAddr', controller.home.getDefaultAddr);
+  // 公告
+  router.get(`/wxApi/announcement/AnnouncementList`, controller.home.AnnouncementList);
 };

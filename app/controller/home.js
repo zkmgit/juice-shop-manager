@@ -45,7 +45,7 @@ class HomeController extends Controller {
 
     // 登录成功生成token
     const token = this.app.jwt.sign(params, this.app.config.jwt.secret, { expiresIn: '2h' });
-    
+
     if (!result) {
       // 若未注册，则 插入一条数据并将用户信息和token一起
       const res = await ctx.service.wxUser.insertWxUser({
@@ -68,7 +68,7 @@ class HomeController extends Controller {
       }
 
       const newUser = await ctx.service.wxUser.getWxUserInfoById({ open_id: params.openid });
-  
+
       ctx.body = {
         code: '1',
         msg: 'success',
@@ -165,6 +165,46 @@ class HomeController extends Controller {
       }),
     };
   }
+    /**
+     * @summary 公告接口
+     * @description 默认全部公告数据
+     * @router get /wxApi/announcement/AnnouncementList
+     * @response 200 AnnouncementJsonBody 返回结果
+     */
+    async AnnouncementList() {
+        const { ctx } = this;
+
+        // sql组装
+        const prefix = 'SELECT t.id,t.title,t.content,t.is_delete,t.create_time,t.update_time FROM announcement AS t';
+        const suffix = `ORDER BY t.create_time DESC`;
+
+        // 组装sql语句
+        const sql = `${prefix} ${suffix}`;
+
+        const { result, total } = await ctx.service.announce.getAnnounceList(sql);
+        if (!result) {
+            ctx.body = {
+                code: '-1',
+                msg: 'error',
+                result: [],
+            };
+            return;
+        }
+
+        ctx.body = {
+            code: '1',
+            msg: 'success',
+            result: result.map(item => {
+                return {
+                    ...item,
+                    createTime: formatDateTime(item.create_time),
+                    updateTime: formatDateTime(item.update_time)
+                };
+            }),
+            total,
+        };
+    }
+
   /**
     * @summary 分类接口
     * @description 分类接口 默认返回前10条分类数据
@@ -207,7 +247,7 @@ class HomeController extends Controller {
    async getAllProductListByCategoryId() {
     const { ctx } = this;
     const params = ctx.params;
-    
+
     // sql组装
     const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.original_price,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time,p.seckill_start_time,p.seckill_end_time FROM `product` AS p';
     const suffix = `limit 999 offset 0`;
@@ -282,7 +322,7 @@ class HomeController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
@@ -290,12 +330,12 @@ class HomeController extends Controller {
       };
       return;
     }
-    
+
     // sql组装
     const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.original_price,p.details_img,p.status,p.buy_quantity,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time,p.seckill_start_time,p.seckill_end_time FROM `product` AS p';
     const suffix = `limit ${params.ps} offset ${(params.pn - 1) * params.ps}`;
     let buildSql = `Where is_delete = '1' AND status = '1'`;
-    
+
     Object.keys(params).filter(key => !['ps', 'pn'].includes(key)).forEach(key => {
       if (['id', 'spu', 'category_id'].includes(key)) {
         buildSql = `${buildSql} AND ${key} = '${params[key]}'`
@@ -334,7 +374,7 @@ class HomeController extends Controller {
   */
    async getAllSeckillProductList() {
     const { ctx } = this;
-    
+
     // sql组装
     const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.original_price,p.details_img,p.status,p.buy_quantity,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time,p.seckill_start_time,p.seckill_end_time FROM `product` AS p';
     const suffix = `limit 999 offset 0`;
@@ -377,7 +417,7 @@ class HomeController extends Controller {
   */
    async getAllRecommendedProductList() {
     const { ctx } = this;
-    
+
     // sql组装
     const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.original_price,p.details_img,p.status,p.buy_quantity,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time,p.seckill_start_time,p.seckill_end_time FROM `product` AS p';
     const suffix = `limit 999 offset 0`;
@@ -412,7 +452,7 @@ class HomeController extends Controller {
    async getAttributesByIds() {
      const { ctx } = this;
      const params = ctx.params;
-     
+
      const sql = `SELECT * FROM attribute WHERE id in (${params.ids})`;
     const { result } = await ctx.service.attribute.getAllAttributeList(sql);
 
@@ -492,7 +532,7 @@ class HomeController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
@@ -620,7 +660,7 @@ class HomeController extends Controller {
     const { id } = ctx.params;
     // 校验购物车的限时秒杀商品是否过期，过期则提示xx商品库存不足，请调整购物车
     const sql = `SELECT s.id,p.title, p.categoryName, p.seckill_start_time,p.seckill_end_time FROM shopping_cart AS s INNER JOIN product AS p ON s.product_id = p.id AND s.user_id = ${id} AND s.is_delete = 1`;
-    
+
     const { result } = await ctx.service.shoppingCart.getAllShoppingCartList(sql);
 
     if (result.length === 0) {
@@ -688,7 +728,7 @@ class HomeController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
@@ -700,10 +740,10 @@ class HomeController extends Controller {
     const { cartInfoList, isPay, ...rest  } = params;
 
     const parseCartInfoList = JSON.parse(cartInfoList);
-    
+
     // 订单编号 J-当前日期+5位数 系统生成
     const { total } = await ctx.service.order.getOrderTotal();
-    
+
     const order_number = `J-${formatDateTime(new Date(), 'YYYYMMDD')}${10000 + total}`
     // 用户id
     const user_id = parseCartInfoList[0].user_id
@@ -713,7 +753,7 @@ class HomeController extends Controller {
     // 需要判断同商品不同规格的情况下  商品数量是否满足
     const sql = `SELECT s.product_id,SUM(s.quantity) as quantity,p.inventory,p.title FROM shopping_cart s INNER JOIN product p ON s.id in (${cart_ids}) AND p.id = s.product_id GROUP BY product_id`;
     const result = await this.app.mysql.query(sql);
-    
+
     const row = result.find(item => +item.quantity > +item.inventory);
 
     if (row) {
@@ -906,7 +946,7 @@ class HomeController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
@@ -917,7 +957,7 @@ class HomeController extends Controller {
 
     // 付款的消息
     let msg = ''
-    
+
     const currentUserRes = await ctx.service.wxUser.getWxUserInfoById({ id: params.user_id });
     const orderRes = await ctx.service.order.getOrderInfoById({ id: params.order_id });
 
@@ -957,7 +997,7 @@ class HomeController extends Controller {
      const prefix = 'SELECT a.id,a.name,a.user_id,a.area,a.address,a.phone,a.status,a.is_delete,a.create_time,a.update_time FROM addr AS a';
      const suffix = `limit 1 offset 0`;
      let buildSql = `Where status = '1' AND is_delete = '1'`;
- 
+
      // 组装sql语句
      const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
@@ -993,7 +1033,7 @@ class HomeController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
@@ -1006,7 +1046,7 @@ class HomeController extends Controller {
      const prefix = 'SELECT a.id,a.name,a.user_id,a.area,a.address,a.phone,a.status,a.is_delete,a.create_time,a.update_time FROM addr AS a';
      const suffix = `limit ${params.ps} offset ${(params.pn - 1) * params.ps}`;
      let buildSql = `Where status = '1' AND is_delete = '1' AND user_id = '${params.user_id}'`;
- 
+
      // 组装sql语句
      const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
@@ -1051,7 +1091,7 @@ class HomeController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-     
+
       ctx.body = {
         code: '-1',
         msg,
@@ -1096,7 +1136,7 @@ class HomeController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
@@ -1142,7 +1182,7 @@ class HomeController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
