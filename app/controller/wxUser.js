@@ -27,7 +27,7 @@ class WxUserController extends Controller {
 
     // 登录成功生成token
     const token = this.app.jwt.sign(params, this.app.config.jwt.secret, { expiresIn: '2h' });
-    
+
     if (!result) {
       // 若未注册，则 插入一条数据并将用户信息和token一起
       const res = await ctx.service.wxUser.insertWxUser({
@@ -50,7 +50,7 @@ class WxUserController extends Controller {
       }
 
       const newUser = await ctx.service.wxUser.getWxUserInfoById({ open_id: params.openid, session_key: params.session_key });
-  
+
       ctx.body = {
         code: '1',
         msg: 'success',
@@ -83,7 +83,7 @@ class WxUserController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
@@ -96,7 +96,7 @@ class WxUserController extends Controller {
     const prefix = 'SELECT u.id,u.open_id,u.session_key,u.nick_name,u.addr,u.status,u.avatar_url,u.balance,u.is_delete,u.create_time,u.update_time FROM wx_user AS u';
     const suffix = `ORDER BY id DESC limit ${params.ps} offset ${(params.pn - 1) * params.ps}`;
     let buildSql = ''
-    
+
     Object.keys(params).filter(key => !['ps', 'pn'].includes(key)).forEach(key => {
       if (['id', 'is_delete', 'status'].includes(key)) {
         buildSql = buildSql !== '' ? `${buildSql} AND ${key} = '${params[key]}'` : `Where ${key} = '${params[key]}'`
@@ -127,6 +127,8 @@ class WxUserController extends Controller {
       result: result.map(item => {
         return {
           ...item,
+          // 将nick_name解码恢复成用户的名字
+          nickName: decodeURI(item.nick_name),
           isDelete: item.is_delete === 1 ? '未删除' : item.is_delete === 0 ? '已删除' : '',
           statusName: item.status === 1 ? '启用' : item.status === 0 ? '禁用' : '',
           createTime: formatDateTime(item.create_time),
