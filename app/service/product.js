@@ -31,6 +31,11 @@ class ProductService extends Service {
     const res = await this.app.mysql.update('product', params);
     return { res };
   }
+  //编辑限时秒杀时间
+  async updateSkillProduct(params) {
+    const res = await this.app.mysql.update('product', params);
+    return { res };
+  }
   // 编辑产品
   async updateProductBySql(sql) {
     const res = await this.app.mysql.query(sql);

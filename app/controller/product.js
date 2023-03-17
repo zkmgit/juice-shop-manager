@@ -22,7 +22,7 @@ class ProductController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
@@ -30,12 +30,12 @@ class ProductController extends Controller {
       };
       return;
     }
-    
+
     // sql组装
-    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time,p.original_price FROM `product` AS p'
+    const prefix = 'SELECT p.id,p.spu,p.title,p.image,p.price,p.details_img,p.status,p.category_id,p.categoryName,p.inventory,p.attributes,p.attributesName,p.remark,p.is_delete,p.create_time,p.update_time,p.seckill_start_time,p.seckill_end_time,p.original_price FROM `product` AS p'
     const suffix = `ORDER BY id DESC limit ${params.ps} offset ${(params.pn - 1) * params.ps}`
     let buildSql = ''
-    
+
     Object.keys(params).filter(key => !['ps', 'pn'].includes(key)).forEach(key => {
       if (['id', 'spu', 'is_delete', 'status', 'category_id'].includes(key)) {
         buildSql = buildSql !== '' ? `${buildSql} AND ${key} = '${params[key]}'` : `Where ${key} = '${params[key]}'`
@@ -68,7 +68,9 @@ class ProductController extends Controller {
           ...item,
           statusName: item.status === 1 ? '启用' : item.status === 0 ? '禁用' : '',
           createTime: formatDateTime(item.create_time),
-          updateTime: formatDateTime(item.update_time)
+          updateTime: formatDateTime(item.update_time),
+          seckillStartTime: item.seckill_start_time != null ? formatDateTime(item.seckill_start_time) : '',
+          seckillEndTime: item.seckill_end_time != null ? formatDateTime(item.seckill_end_time) : ''
         };
       }),
       total,
@@ -89,7 +91,7 @@ class ProductController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
@@ -139,7 +141,7 @@ class ProductController extends Controller {
 
     if (validate) {
       const msg = `missing_field [${validate.map(item => item.field)}]`;
-      
+
       ctx.body = {
         code: '-1',
         msg,
@@ -149,6 +151,53 @@ class ProductController extends Controller {
     }
 
     const result = await ctx.service.product.updateProduct(params);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {
+          value: 0,
+        },
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: {
+        value: result.res.affectedRows,
+      },
+    };
+
+  }
+  /**
+   * @summary 编辑限时秒杀时间
+   * @description 编辑限时秒杀时间
+   * @router put /api/product/updateSkillProduct
+   * @request body EditProductParams
+   * @response 200 JsonBody 返回结果
+   */
+  async updateSkillProduct() {
+    const { ctx } = this;
+    console.log('ctx.request.body',ctx.request.body)
+    const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ id: 'string', seckill_start_time: 'string', seckill_end_time: 'string' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
+      return;
+    }
+
+    const result = await ctx.service.product.updateSkillProduct(params);
 
     if (!result) {
       ctx.body = {

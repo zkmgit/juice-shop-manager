@@ -258,6 +258,13 @@ module.exports = {
       remark: '商品描述',
     } },
   },
+  EditSkillProductParams: {
+    param: { type: 'string', required: true, example: {
+        id: 1,
+        seckill_start_time:'yyyy-MM-dd HH:MM:SS',
+        seckill_end_time:'yyyy-MM-dd HH:MM:SS'
+      } },
+  },
   AddProductParams: {
     param: { type: 'string', required: true, example: {
       title: '商品名称',

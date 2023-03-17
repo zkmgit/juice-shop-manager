@@ -10,6 +10,8 @@ module.exports = app => {
   router.post(`${prefix}insertProduct`, controller.product.insertProduct);
   // 编辑产品
   router.put(`${prefix}updateProduct`, controller.product.updateProduct);
+  // 编辑限时秒杀时间
+  router.put(`${prefix}updateSkillProduct`, controller.product.updateSkillProduct);
   // 删除产品
   router.delete(`${prefix}deleteProduct/:id`, controller.product.deleteProduct);
 };
