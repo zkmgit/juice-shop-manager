@@ -52,6 +52,18 @@ module.exports = {
       status: 'integer 1启用 0禁用',
     } },
   },
+  UpdateBalanceParams: {
+    param: { type: 'string', required: true, example: {
+        id: 'id',
+        balance: 20,
+      } },
+  },
+  UpdateFreezeParams: {
+    param: { type: 'string', required: true, example: {
+        id: 'id',
+        status: 0,
+      } },
+  },
   AddUserParams: {
     param: { type: 'string', required: true, example: {
       name: 'string 用户名称',

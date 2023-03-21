@@ -27,6 +27,16 @@ class WxUserService extends Service {
 
     return { res };
   }
+  // 编辑金额
+  async updateBalance(params) {
+    const res = await this.app.mysql.update('wx_user', params);
+    return { res };
+  }
+  //冻结or解冻用户
+  async updateFreeze(params) {
+    const res = await this.app.mysql.update('wx_user', params);
+    return { res };
+  }
   // 删除小程序用户
   async deleteWxUser(params) {
     const res = await this.app.mysql.delete('wx_user', params);

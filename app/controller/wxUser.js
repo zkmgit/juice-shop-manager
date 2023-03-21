@@ -58,6 +58,7 @@ class WxUserController extends Controller {
         token,
       };
     } else {
+      console.log('result', result);
       // 若已注册了，则生成token，将已注册的用户信息返回
       ctx.body = {
         code: '1',
@@ -130,12 +131,102 @@ class WxUserController extends Controller {
           // 将nick_name解码恢复成用户的名字
           nickName: decodeURI(item.nick_name),
           isDelete: item.is_delete === 1 ? '未删除' : item.is_delete === 0 ? '已删除' : '',
-          statusName: item.status === 1 ? '启用' : item.status === 0 ? '禁用' : '',
+          statusName: item.status === 1 ? '启用' : item.status === 0 ? '冻结禁用' : '',
           createTime: formatDateTime(item.create_time),
           updateTime: formatDateTime(item.update_time)
         };
       }),
       total,
+    };
+  }
+  /**
+   * @summary 修改用户金额
+   * @description 修改用户金额
+   * @router put /api/wxUser/updateBalance
+   * @request body UpdateBalanceParams
+   * @response 200 JsonBody 返回结果
+   */
+  async updateBalance() {
+    const { ctx } = this;
+    const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ id: 'string', balance: 'integer' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
+      return;
+    }
+
+    const result = await ctx.service.wxUser.updateBalance(params);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {
+          value: 0,
+        },
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: {
+        value: result.res.affectedRows,
+      },
+    };
+  }
+  /**
+   * @summary 冻结及解冻用户金额
+   * @description 修改用户金额
+   * @router put /api/wxUser/updateFreeze
+   * @request body UpdateFreezeParams
+   * @response 200 JsonBody 返回结果
+   */
+  async updateFreeze() {
+    const { ctx } = this;
+    const params = ctx.request.body;
+    // 字段校验
+    const validate = this.app.validator.validate({ id: 'string', status: 'integer' }, params);
+
+    if (validate) {
+      const msg = `missing_field [${validate.map(item => item.field)}]`;
+
+      ctx.body = {
+        code: '-1',
+        msg,
+        result: {},
+      };
+      return;
+    }
+
+    const result = await ctx.service.wxUser.updateFreeze(params);
+
+    if (!result) {
+      ctx.body = {
+        code: '-1',
+        msg: 'error',
+        result: {
+          value: 0,
+        },
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: '1',
+      msg: 'success',
+      result: {
+        value: result.res.affectedRows,
+      },
     };
   }
 }
