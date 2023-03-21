@@ -76,13 +76,24 @@ class HomeController extends Controller {
         token,
       };
     } else {
-      // 若已注册了，则生成token，将已注册的用户信息返回
-      ctx.body = {
-        code: '1',
-        msg: 'success',
-        result,
-        token,
-      };
+        // 判断用户是否被禁用(不被禁用则返回)
+        if(result.status){
+            // 若已注册了，则生成token，将已注册的用户信息返回
+            ctx.body = {
+                code: '1',
+                msg: 'success',
+                result,
+                token,
+            };
+        }else{
+            ctx.body = {
+                code: '-1',
+                msg: '授权失败.该账号已被冻结',
+                result: {
+                    value: 0,
+                },
+            };
+        }
     }
   }
   /**
