@@ -27,15 +27,15 @@ module.exports = appInfo => {
     // 单数据库信息配置
     client: {
       // host
-      host: 'localhost',
+      host: '47.120.5.75',
       // 端口号
       port: '3306',
       // 用户名
-      user: 'root',
+      user: 'juice',
       // 密码
-      password: '123456',
+      password: 'YsB7sHRyPGFrWTp3',
       // 数据库名
-      database: 'juice-shop-manager',
+      database: 'juice',
     },
     // 是否加载到 app 上，默认开启
     app: true,
@@ -91,6 +91,12 @@ module.exports = appInfo => {
     convert: true,
     widelyUndefined: true,
   };
+
+  config.cors = {
+    origin: '*',
+    allowMethods: 'GET,PUT,POST,DELETE',
+    credentials: true
+ }
 
   return {
     ...config,

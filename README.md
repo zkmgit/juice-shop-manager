@@ -20,3 +20,12 @@ token加密配置 ./config/config.default.js   搜索config.jwt
 const bucket = ''; // 要上传的空间名
 const imageUrl = ''; // 空间绑定的域名
 ```
+
+<!-- 上线配置启动端口 config.default.js -->
+config.cluster = {
+    listen: {
+      path: '',
+      port: 8082,
+      hostname: '0.0.0.0'
+    }
+  }
