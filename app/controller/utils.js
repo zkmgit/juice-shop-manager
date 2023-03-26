@@ -45,7 +45,7 @@ class UtilsController extends Controller {
     const carouselImageSql = 'SELECT c.id,c.image FROM carousel_image AS c';
     const carouselImageRes = await ctx.service.carouselImage.getAllCarouselImageList(carouselImageSql);
     // 产品
-    const productSql = 'SELECT p.id,p.image FROM `product` AS p';
+    const productSql = 'SELECT p.id,p.image,p.details_img FROM `product` AS p';
     const productRes = await ctx.service.product.getAllProductList(productSql);
     // 购物车
     const shoppingCartSql = 'SELECT s.id,s.product_image FROM `shopping_cart` AS s';
@@ -67,7 +67,11 @@ class UtilsController extends Controller {
 
     if (productRes.result && productRes.result.length > 0) {
       productRes.result.forEach(productItem => {
-        const p_params = { id: productItem.id, image: productItem.image.replace(params.oldrealmname, params.newrealmname) }
+        const p_params = { 
+          id: productItem.id,
+          image: productItem.image.replace(params.oldrealmname, params.newrealmname),
+          details_img: productItem.details_img.replace(new RegExp(params.oldrealmname, 'g'), params.newrealmname)
+        }
         promiseList.push(ctx.service.product.updateProduct(p_params));
       })
     }
