@@ -9,9 +9,9 @@ class WxUserService extends Service {
     return result;
   }
   // 获取所有的小程序用户信息
-  async getAllWxUserList(sql) {
+  async getAllWxUserList(sql, buildSql) {
     const result = await this.app.mysql.query(sql);
-    const total = await this.app.mysql.query('select count(*) as total from wx_user');
+    const total = await this.app.mysql.query('select count(*) as total from wx_user' + (buildSql ? ` ${buildSql}` : ''));
 
     return { result, total: total[0].total };
   }

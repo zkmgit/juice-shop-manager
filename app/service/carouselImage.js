@@ -9,9 +9,9 @@ class CarouselImageService extends Service {
     return result;
   }
   // 获取所有的轮播图信息
-  async getAllCarouselImageList(sql) {
+  async getAllCarouselImageList(sql, buildSql = '') {
     const result = await this.app.mysql.query(sql);
-    const total = await this.app.mysql.query('select count(*) as total from carousel_image');
+    const total = await this.app.mysql.query('select count(*) as total from carousel_image' + (buildSql ? ` ${buildSql}` : ''));
 
     return { result, total: total[0].total };
   }

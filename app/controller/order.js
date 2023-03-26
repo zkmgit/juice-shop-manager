@@ -48,7 +48,7 @@ class OrderController extends Controller {
     // 组装sql语句
     const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
-    const { result, total } = await ctx.service.order.getAllOrderList(sql);
+    const { result, total } = await ctx.service.order.getAllOrderList(sql, buildSql);
 
     if (!result) {
       ctx.body = {

@@ -47,7 +47,7 @@ class AttributeController extends Controller {
      // 组装sql语句
      const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
-    const { result, total } = await ctx.service.attribute.getAllAttributeList(sql);
+    const { result, total } = await ctx.service.attribute.getAllAttributeList(sql, buildSql);
 
     if (!result) {
       ctx.body = {

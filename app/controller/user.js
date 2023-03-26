@@ -86,7 +86,7 @@ class UserController extends Controller {
     // 组装sql语句
     const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
-    const { result, total } = await ctx.service.user.getAllUserList(sql);
+    const { result, total } = await ctx.service.user.getAllUserList(sql, buildSql);
 
     if (!result) {
       ctx.body = {

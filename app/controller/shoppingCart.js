@@ -56,7 +56,7 @@ class ShoppingCartController extends Controller {
     // 组装sql语句
     const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
-    const { result, total } = await ctx.service.shoppingCart.getAllShoppingCartList(sql);
+    const { result, total } = await ctx.service.shoppingCart.getAllShoppingCartList(sql, buildSql);
 
     if (!result) {
       ctx.body = {

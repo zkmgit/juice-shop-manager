@@ -9,9 +9,9 @@ class ShoppingCartService extends Service {
     return result;
   }
   // 获取所有的购物车信息
-  async getAllShoppingCartList(sql) {
+  async getAllShoppingCartList(sql, buildSql = '') {
     const result = await this.app.mysql.query(sql);
-    const total = await this.app.mysql.query('select count(*) as total from shopping_cart');
+    const total = await this.app.mysql.query('select count(*) as total from shopping_cart' + (buildSql ? ` ${buildSql}` : ''));
 
     return { result, total: total[0].total };
   }

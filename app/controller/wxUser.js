@@ -110,7 +110,7 @@ class WxUserController extends Controller {
     // 组装sql语句
     const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
-    const { result, total } = await ctx.service.wxUser.getAllWxUserList(sql);
+    const { result, total } = await ctx.service.wxUser.getAllWxUserList(sql, buildSql);
 
     if (!result) {
       ctx.body = {

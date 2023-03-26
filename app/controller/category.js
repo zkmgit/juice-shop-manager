@@ -47,7 +47,7 @@ class CategoryController extends Controller {
     // 组装sql语句
     const sql = buildSql === '' ? `${prefix} ${suffix}` : `${prefix} ${buildSql} ${suffix}`
 
-    const { result, total } = await ctx.service.category.getAllCategoryList(sql);
+    const { result, total } = await ctx.service.category.getAllCategoryList(sql, buildSql);
 
     if (!result) {
       ctx.body = {

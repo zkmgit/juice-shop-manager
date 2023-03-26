@@ -9,9 +9,9 @@ class UserService extends Service {
     return result;
   }
   // 获取所有的用户信息
-  async getAllUserList(sql) {
+  async getAllUserList(sql, buildSql = '') {
     const result = await this.app.mysql.query(sql);
-    const total = await this.app.mysql.query('select count(*) as total from user');
+    const total = await this.app.mysql.query('select count(*) as total from user' + (buildSql ? ` ${buildSql}` : ''));
 
     return { result, total: total[0].total };
   }

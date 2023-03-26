@@ -9,9 +9,9 @@ class OrderService extends Service {
     return result;
   }
   // 获取所有的订单信息
-  async getAllOrderList(sql) {
+  async getAllOrderList(sql, buildSql = '') {
     const result = await this.app.mysql.query(sql);
-    const total = await this.app.mysql.query('select count(*) as total from `order`');
+    const total = await this.app.mysql.query('select count(*) as total from `order`' + (buildSql ? ` ${buildSql}` : ''));
 
     return { result, total: total[0].total };
   }

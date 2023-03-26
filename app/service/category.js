@@ -9,9 +9,9 @@ class CategoryService extends Service {
     return result;
   }
   // 获取所有的分类信息
-  async getAllCategoryList(sql) {
+  async getAllCategoryList(sql, buildSql = '') {
     const result = await this.app.mysql.query(sql);
-    const total = await this.app.mysql.query('select count(*) as total from category');
+    const total = await this.app.mysql.query('select count(*) as total from category' + (buildSql ? ` ${buildSql}` : ''));
 
     return { result, total: total[0].total };
   }

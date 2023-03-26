@@ -9,9 +9,9 @@ class ProductService extends Service {
     return result;
   }
   // 获取所有的产品信息
-  async getAllProductList(sql) {
+  async getAllProductList(sql, buildSql = '') {
     const result = await this.app.mysql.query(sql);
-    const total = await this.app.mysql.query('select count(*) as total from product');
+    const total = await this.app.mysql.query('select count(*) as total from product' + (buildSql ? ` ${buildSql}` : ''));
 
     return { result, total: total[0].total };
   }
